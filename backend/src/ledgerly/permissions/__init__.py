@@ -1,11 +1,12 @@
-
 from __future__ import annotations
+
 from enum import IntEnum
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ledgerly.db.models import Folder, FolderPermission
+
 
 class Role(IntEnum):
     VIEWER = 1
@@ -15,6 +16,7 @@ class Role(IntEnum):
     @property
     def label(self) -> str:
         return self.name.lower()
+
 
 class FolderNotFound(Exception):
     """The folder does not exist, or the user has no access to it."""

@@ -23,19 +23,19 @@ class Settings(BaseSettings):
     seed_demo_password: SecretStr | None = None
     data_dir: Path = REPO_ROOT / "data"
 
-      # Signs login tokens. Required to run the API. Generate one with:
+    # Signs login tokens. Required to run the API. Generate one with:
     #   python -c "import secrets; print(secrets.token_urlsafe(32))"
 
     auth_secret: SecretStr | None = None
     auth_token_ttl_minutes: int = 480
 
-     # Browser origins allowed to call the API (the Next.js dev server).
+    # Browser origins allowed to call the API (the Next.js dev server).
     cors_origins: list[str] = ["http://localhost:3000"]
 
     # How long a bulk-update preview can be approved before it expires.
     batch_preview_ttl_minutes: int = 15
 
-      # MCP server (the agent's tools). Public URLs are what clients use to reach each service.
+    # MCP server (the agent's tools). Public URLs are what clients use to reach each service.
     api_public_url: str = "http://localhost:8000"
     mcp_host: str = "127.0.0.1"
     mcp_port: int = 8001
@@ -51,7 +51,7 @@ class Settings(BaseSettings):
         no matter which directory a command runs from."""
         prefix = "sqlite:///"
         if self.database_url.startswith(prefix):
-            path = self.database_url[len(prefix):]
+            path = self.database_url[len(prefix) :]
             if path and path != ":memory:" and not Path(path).is_absolute():
                 return f"{prefix}{(BACKEND_DIR / path).as_posix()}"
         return self.database_url

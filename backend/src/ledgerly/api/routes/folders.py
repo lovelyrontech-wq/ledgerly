@@ -1,4 +1,5 @@
 """Folders the signed-in user can access, and the records in them."""
+
 from __future__ import annotations
 
 from typing import Annotated
@@ -10,7 +11,6 @@ from ledgerly.api.deps import CurrentUser, SessionDep
 from ledgerly.api.schemas import FolderOut, RecordOut, RecordPage
 from ledgerly.db.models import Folder, LedgerRecord
 from ledgerly.permissions import Role, accessible_folders, require_folder
-
 
 router = APIRouter(prefix="/api/folders", tags=["folders"])
 
@@ -25,6 +25,7 @@ def _folder_out(folder: Folder, role: Role) -> FolderOut:
         created_at=folder.created_at,
     )
 
+
 @router.get("", response_model=list[FolderOut])
 def list_folders(user: CurrentUser, session: SessionDep) -> list[FolderOut]:
     return [_folder_out(f, role) for f, role in accessible_folders(session, user.id)]
@@ -34,6 +35,7 @@ def list_folders(user: CurrentUser, session: SessionDep) -> list[FolderOut]:
 def get_folder(folder_id: str, user: CurrentUser, session: SessionDep) -> FolderOut:
     folder, role = require_folder(session, user.id, folder_id, Role.VIEWER)
     return _folder_out(folder, role)
+
 
 @router.get("/{folder_id}/records", response_model=RecordPage)
 def list_records(

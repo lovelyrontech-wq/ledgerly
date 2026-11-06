@@ -29,6 +29,7 @@ from ledgerly.services import batches
 # Most items a tool returns, so a large folder does not flood the model's context.
 MAX_ITEMS_IN_RESULT = 50
 
+
 @contextmanager
 def tool_errors() -> Iterator[None]:
     """Turn expected failures into ToolError, whose message the model sees and can act on."""
@@ -83,6 +84,7 @@ def list_records(
         ],
     }
 
+
 def _batch_result(batch: Batch, message: str) -> dict[str, Any]:
     items = sorted(batch.items, key=lambda i: (i.record.name, i.record_id))
     summary: dict[str, int] = {}
@@ -113,6 +115,7 @@ def _batch_result(batch: Batch, message: str) -> dict[str, Any]:
         "changesNotShown": len(items) - len(shown),
         "message": message,
     }
+
 
 def preview_bulk_update(
     session: Session,
@@ -149,6 +152,7 @@ def apply_bulk_update(session: Session, user_id: str, batch_id: str, approval_co
         message += f" {skipped} record(s) changed after the preview and were skipped, not overwritten."
     return _batch_result(batch, message)
 
+
 def undo_batch(session: Session, user_id: str, batch_id: str) -> dict[str, Any]:
     with tool_errors():
         batch = batches.undo_batch(session, user_id, batch_id)
@@ -158,6 +162,7 @@ def undo_batch(session: Session, user_id: str, batch_id: str) -> dict[str, Any]:
     if kept:
         message += f" {kept} record(s) were edited after the update and were left as they are."
     return _batch_result(batch, message)
+
 
 def search_help_docs(docs_dir: Path, query: str, limit: int = 3) -> dict[str, Any]:
     results = HelpDocs.load(docs_dir).search(query, limit=max(1, min(limit, 5)))

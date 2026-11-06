@@ -26,10 +26,12 @@ _STOP_WORDS = frozenset(
 _K1 = 1.5
 _B = 0.75
 
+
 def tokenize(text: str) -> list[str]:
     words = (w for w in _WORD.findall(text.lower()) if w not in _STOP_WORDS)
     # Crude plural folding, so "records" matches "record".
     return [w[:-1] if len(w) > 3 and w.endswith("s") and not w.endswith("ss") else w for w in words]
+
 
 @dataclass(frozen=True)
 class Section:
@@ -37,12 +39,14 @@ class Section:
     source: str
     text: str
 
+
 @dataclass(frozen=True)
 class SearchResult:
     title: str
     source: str
     text: str
     score: float
+
 
 def split_sections(source: str, markdown: str) -> list[Section]:
     doc_title = source
@@ -66,6 +70,7 @@ def split_sections(source: str, markdown: str) -> list[Section]:
             lines.append(line)
     flush()
     return sections
+
 
 class HelpDocs:
     def __init__(self, sections: list[Section]) -> None:
@@ -95,7 +100,7 @@ class HelpDocs:
             for term in terms:
                 tf = tokens.get(term, 0)
                 if tf:
-                    norm = _K1 * (1 - _B + _B * self._ngth)
+                    norm = _K1 * (1 - _B + _B * self._lengths[index] / self._avg_length)
                     score += self._idf[term] * tf * (_K1 + 1) / (tf + norm)
             if score > 0:
                 scored.append((score, index))

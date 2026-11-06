@@ -36,9 +36,7 @@ def run_checks(session: Session, demo_password: str | None) -> list[tuple[str, b
 
     items = session.scalars(select(BatchItem)).all()
     check("batch items", len(items), 3)
-    mismatched = [
-        i for i in items if i.record.value_cents != i.after or i.record.version != i.expected_version + 1
-    ]
+    mismatched = [i for i in items if i.record.value_cents != i.after or i.record.version != i.expected_version + 1]
     check("seed batch items match record values and versions", len(mismatched), 0)
 
     if demo_password:

@@ -25,7 +25,7 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session, selectinload
 
 from ledgerly.db.models import AuditLog, Batch, BatchItem, LedgerRecord, utcnow
-from ledgerly.permissions import FolderNotFound, Role
+from ledgerly.permissions import FolderNotFound, Role, require_folder
 
 MAX_BATCH_RECORDS = 1000
 
@@ -35,7 +35,7 @@ class BatchNotFound(Exception):
 
 
 class BatchConflict(Exception):
-     """The batch is in the wrong state for this action, or the request does not match it."""
+    """The batch is in the wrong state for this action, or the request does not match it."""
 
 
 class BatchExpired(BatchConflict):
@@ -43,7 +43,7 @@ class BatchExpired(BatchConflict):
 
 
 def _as_utc(value: datetime) -> datetime:
-    # SQLite returns naive datetimes; everything is st
+    # SQLite returns naive datetimes; everything is stored in UTC.
     return value.replace(tzinfo=UTC) if value.tzinfo is None else value
 
 
@@ -75,7 +75,6 @@ def load_batch(session: Session, user_id: str, batch_id: str, minimum: Role) -> 
     return batch
 
 
-
 def create_preview(
     session: Session,
     user_id: str,
@@ -85,7 +84,7 @@ def create_preview(
     ttl_minutes: int,
     status: str | None = None,
 ) -> Batch:
-    """Compute old -> new for every matching record an. Writes no records."""
+    """Compute old -> new for every matching record and store it as a pending batch. Writes no records."""
     require_folder(session, user_id, folder_id, Role.EDITOR)
 
     query = select(LedgerRecord).where(LedgerRecord.folder_id == folder_id)
@@ -129,6 +128,7 @@ def create_preview(
         )
     )
     return batch
+
 
 def apply_batch(session: Session, user_id: str, batch_id: str, approved_hash: str, idempotency_key: str) -> Batch:
     """Apply an approved preview. Safe to retry with the same idempotency key."""
@@ -184,7 +184,6 @@ def apply_batch(session: Session, user_id: str, batch_id: str, approved_hash: st
     session.flush()
     session.expire_all()  # reload status, versions and values written by the UPDATEs above
     return load_batch(session, user_id, batch_id, Role.VIEWER)
-
 
 
 def undo_batch(session: Session, user_id: str, batch_id: str) -> Batch:

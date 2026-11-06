@@ -19,6 +19,7 @@ STATUSES_BY_FOLDER_TYPE = {
     "product": {"active", "archived"},
 }
 
+
 def _load_record(session: SessionDep, user_id: str, record_id: str, minimum: Role) -> tuple[LedgerRecord, Folder]:
     record = session.get(LedgerRecord, record_id)
     if record is None:
@@ -29,6 +30,7 @@ def _load_record(session: SessionDep, user_id: str, record_id: str, minimum: Rol
         # Same answer as a missing record: don't reveal records in folders you can't see.
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found") from None
     return record, folder
+
 
 @router.get("/{record_id}", response_model=RecordOut)
 def get_record(record_id: str, user: CurrentUser, session: SessionDep) -> RecordOut:

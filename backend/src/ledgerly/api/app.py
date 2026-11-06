@@ -1,4 +1,3 @@
-
 """Create the FastAPI app.
 
 Run (from backend/):  uv run uvicorn ledgerly.api.app:create_app --factory --reload
@@ -12,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session, sessionmaker
 
-from ledgerly.api.routes import auth, folders, records, batches
+from ledgerly.api.routes import auth, batches, folders, records
 from ledgerly.config import Settings, get_settings
 from ledgerly.db.session import session_factory as default_session_factory
 from ledgerly.permissions import FolderNotFound, PermissionDenied
@@ -20,6 +19,7 @@ from ledgerly.security import MIN_SECRET_LENGTH
 
 # 2. add an import under "from ledgerly.security import MIN_SECRET_LENGTH":
 from ledgerly.services.batches import BatchConflict, BatchNotFound
+
 
 def create_app(
     settings: Settings | None = None,

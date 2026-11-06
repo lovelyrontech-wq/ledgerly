@@ -76,20 +76,14 @@ def seed(session: Session, seed_dir: Path, demo_password: str) -> dict[str, int]
     for model in TABLES_IN_DELETE_ORDER:
         session.execute(delete(model))
 
-    session.add_all(
-        User(id=u["id"], email=u["email"], name=u["name"], password_hash=password_hash) for u in users
-    )
+    session.add_all(User(id=u["id"], email=u["email"], name=u["name"], password_hash=password_hash) for u in users)
     session.flush()
     session.add_all(
-        Folder(
-            id=f["id"], name=f["name"], type=f["type"], owner_id=f["ownerId"], created_at=_dt(f["createdAt"])
-        )
+        Folder(id=f["id"], name=f["name"], type=f["type"], owner_id=f["ownerId"], created_at=_dt(f["createdAt"]))
         for f in folders
     )
     session.flush()
-    session.add_all(
-        FolderPermission(folder_id=p["folderId"], user_id=p["userId"], role=p["role"]) for p in permissions
-    )
+    session.add_all(FolderPermission(folder_id=p["folderId"], user_id=p["userId"], role=p["role"]) for p in permissions)
     session.add_all(
         LedgerRecord(
             id=r["id"],

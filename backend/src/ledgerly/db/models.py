@@ -84,12 +84,8 @@ class Folder(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     owner: Mapped[User] = relationship(back_populates="owned_folders")
-    permissions: Mapped[list[FolderPermission]] = relationship(
-        back_populates="folder", cascade="all, delete-orphan"
-    )
-    records: Mapped[list[LedgerRecord]] = relationship(
-        back_populates="folder", cascade="all, delete-orphan"
-    )
+    permissions: Mapped[list[FolderPermission]] = relationship(back_populates="folder", cascade="all, delete-orphan")
+    records: Mapped[list[LedgerRecord]] = relationship(back_populates="folder", cascade="all, delete-orphan")
 
 
 class FolderPermission(Base):
@@ -166,9 +162,7 @@ class BatchItem(Base):
     __tablename__ = "batch_items"
     __table_args__ = (
         UniqueConstraint("batch_id", "record_id", name="uq_batch_items_batch_id_record_id"),
-        CheckConstraint(
-            f"result IS NULL OR {_in('result', BATCH_ITEM_RESULTS)}", name="result"
-        ),
+        CheckConstraint(f"result IS NULL OR {_in('result', BATCH_ITEM_RESULTS)}", name="result"),
     )
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True, default=new_id)
