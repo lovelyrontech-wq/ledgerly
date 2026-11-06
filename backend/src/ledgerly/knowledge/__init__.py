@@ -1,1 +1,1 @@
-"""Placeholder: built in a later step (see README roadmap)."""
+"""Help-doc search for the search_help_docs tool."""

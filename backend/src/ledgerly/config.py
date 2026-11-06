@@ -35,6 +35,12 @@ class Settings(BaseSettings):
     # How long a bulk-update preview can be approved before it expires.
     batch_preview_ttl_minutes: int = 15
 
+      # MCP server (the agent's tools). Public URLs are what clients use to reach each service.
+    api_public_url: str = "http://localhost:8000"
+    mcp_host: str = "127.0.0.1"
+    mcp_port: int = 8001
+    mcp_public_url: str = "http://localhost:8001/mcp"
+
     ollama_base_url: str = "http://localhost:11434"
     ollama_chat_model: str = "qwen2.5:7b-instruct"
     ollama_embed_model: str = "nomic-embed-text"

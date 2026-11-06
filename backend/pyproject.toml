@@ -15,6 +15,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "black>=26.10.1",
     "isort>=9.0.2",
+    "mcp>=2.3.0",
 ]
 
 [dependency-groups]
