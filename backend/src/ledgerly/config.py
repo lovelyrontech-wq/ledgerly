@@ -23,6 +23,15 @@ class Settings(BaseSettings):
     seed_demo_password: SecretStr | None = None
     data_dir: Path = REPO_ROOT / "data"
 
+      # Signs login tokens. Required to run the API. Generate one with:
+    #   python -c "import secrets; print(secrets.token_urlsafe(32))"
+
+    auth_secret: SecretStr | None = None
+    auth_token_ttl_minutes: int = 480
+
+     # Browser origins allowed to call the API (the Next.js dev server).
+    cors_origins: list[str] = ["http://localhost:3000"]
+
     ollama_base_url: str = "http://localhost:11434"
     ollama_chat_model: str = "qwen2.5:7b-instruct"
     ollama_embed_model: str = "nomic-embed-text"

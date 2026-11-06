@@ -10,6 +10,11 @@ dependencies = [
     "alembic>=1.14",
     "pydantic-settings>=2.6",
     "bcrypt>=4.2",
+    "pyjwt>=2.15.1",
+    "pydantic>=2.14.3",
+    "dotenv>=0.9.9",
+    "black>=26.10.1",
+    "isort>=9.0.2",
 ]
 
 [dependency-groups]
@@ -17,6 +22,7 @@ dev = [
     "pytest>=8.3",
     "ruff>=0.8",
     "mypy>=1.13",
+    "httpx2>=2.16.0",
 ]
 
 [project.scripts]
