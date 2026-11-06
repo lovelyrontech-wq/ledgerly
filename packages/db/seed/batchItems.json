@@ -1,0 +1,29 @@
+[
+  {
+    "batchId": "bat_seed_001",
+    "recordId": "rec_prd_001",
+    "field": "valueCents",
+    "before": 73799,
+    "after": 77489,
+    "expectedVersion": 1,
+    "result": "applied"
+  },
+  {
+    "batchId": "bat_seed_001",
+    "recordId": "rec_prd_002",
+    "field": "valueCents",
+    "before": 54799,
+    "after": 57539,
+    "expectedVersion": 1,
+    "result": "applied"
+  },
+  {
+    "batchId": "bat_seed_001",
+    "recordId": "rec_prd_003",
+    "field": "valueCents",
+    "before": 61899,
+    "after": 64994,
+    "expectedVersion": 1,
+    "result": "applied"
+  }
+]

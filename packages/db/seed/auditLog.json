@@ -1,0 +1,23 @@
+[
+  {
+    "id": "aud_001",
+    "userId": "usr_alice",
+    "action": "batch.preview",
+    "batchId": "bat_seed_001",
+    "at": "2026-09-09T09:00:00.000Z",
+    "details": {
+      "recordCount": 3
+    }
+  },
+  {
+    "id": "aud_002",
+    "userId": "usr_alice",
+    "action": "batch.apply",
+    "batchId": "bat_seed_001",
+    "at": "2026-09-09T09:00:00.000Z",
+    "details": {
+      "applied": 3,
+      "failed": 0
+    }
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "usr_alice",
+    "email": "alice@ledgerly.test",
+    "name": "Alice Owner"
+  },
+  {
+    "id": "usr_bob",
+    "email": "bob@ledgerly.test",
+    "name": "Bob Member"
+  },
+  {
+    "id": "usr_carol",
+    "email": "carol@ledgerly.test",
+    "name": "Carol Viewer"
+  }
+]

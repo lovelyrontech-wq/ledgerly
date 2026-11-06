@@ -1,0 +1,28 @@
+{
+  "name": "ledgerly",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Mini SaaS app with folders of records and an in-app agent for previewed, approved bulk updates.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "sample-data": "node scripts/generate-sample-data.mjs",
+    "db:generate": "npm run generate -w @ledgerly/db",
+    "db:migrate": "npm run migrate -w @ledgerly/db --",
+    "db:seed": "npm run seed -w @ledgerly/db",
+    "db:reset": "npm run reset -w @ledgerly/db",
+    "db:studio": "npm run studio -w @ledgerly/db",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "allowScripts": {
+    "@prisma/client@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.28.2": true,
+    "prisma@6.19.3": true
+  }
+}

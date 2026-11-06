@@ -1,0 +1,947 @@
+[
+  {
+    "id": "rec_inv_001",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1001",
+    "valueCents": 574241,
+    "currency": "USD",
+    "status": "paid",
+    "fields": {
+      "customer": "Globex Ltd",
+      "issuedAt": "2026-08-21",
+      "dueAt": "2026-09-20"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-21T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_002",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1002",
+    "valueCents": 359766,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Stark Supplies",
+      "issuedAt": "2026-08-15",
+      "dueAt": "2026-09-14"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-15T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_003",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1003",
+    "valueCents": 1105596,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Globex Ltd",
+      "issuedAt": "2026-07-22",
+      "dueAt": "2026-08-21"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-22T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_004",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1004",
+    "valueCents": 866161,
+    "currency": "USD",
+    "status": "draft",
+    "fields": {
+      "customer": "Stark Supplies",
+      "issuedAt": "2026-08-13",
+      "dueAt": "2026-09-12"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-13T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_005",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1005",
+    "valueCents": 0,
+    "currency": "USD",
+    "status": "draft",
+    "fields": {
+      "customer": "Initech",
+      "issuedAt": "2026-09-11",
+      "dueAt": "2026-10-11"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-11T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_006",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1006",
+    "valueCents": 252547,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Acme Corp",
+      "issuedAt": "2026-07-06",
+      "dueAt": "2026-08-05"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-06T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_007",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1007",
+    "valueCents": 1057341,
+    "currency": "USD",
+    "status": "paid",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-07-15",
+      "dueAt": "2026-08-14"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-15T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_008",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1008",
+    "valueCents": 70868,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Wayne Logistics",
+      "issuedAt": "2026-08-08",
+      "dueAt": "2026-09-07"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-08T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_009",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1009",
+    "valueCents": 815996,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Vandelay Imports",
+      "issuedAt": "2026-07-22",
+      "dueAt": "2026-08-21"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-22T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_010",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1010",
+    "valueCents": 647315,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Initech",
+      "issuedAt": "2026-09-12",
+      "dueAt": "2026-10-12"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-12T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_011",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1011",
+    "valueCents": 833396,
+    "currency": "USD",
+    "status": "paid",
+    "fields": {
+      "customer": "Wonka Retail",
+      "issuedAt": "2026-07-07",
+      "dueAt": "2026-08-06"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-07T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_012",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1012",
+    "valueCents": 1235,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Globex Ltd",
+      "issuedAt": "2026-07-08",
+      "dueAt": "2026-08-07"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-08T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_013",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1013",
+    "valueCents": 44443,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Hooli",
+      "issuedAt": "2026-07-10",
+      "dueAt": "2026-08-09"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-10T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_014",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1014",
+    "valueCents": 120109,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Initech",
+      "issuedAt": "2026-09-16",
+      "dueAt": "2026-10-16"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-16T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_015",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1015",
+    "valueCents": 245090,
+    "currency": "USD",
+    "status": "paid",
+    "fields": {
+      "customer": "Globex Ltd",
+      "issuedAt": "2026-08-30",
+      "dueAt": "2026-09-29"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-30T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_016",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1016",
+    "valueCents": 714521,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Wayne Logistics",
+      "issuedAt": "2026-09-24",
+      "dueAt": "2026-10-24"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-24T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_017",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1017",
+    "valueCents": 755425,
+    "currency": "USD",
+    "status": "paid",
+    "fields": {
+      "customer": "Initech",
+      "issuedAt": "2026-07-29",
+      "dueAt": "2026-08-28"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-29T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_018",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1018",
+    "valueCents": 1057898,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Soylent Foods",
+      "issuedAt": "2026-08-08",
+      "dueAt": "2026-09-07"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-08T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_019",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1019",
+    "valueCents": 692915,
+    "currency": "USD",
+    "status": "draft",
+    "fields": {
+      "customer": "Hooli",
+      "issuedAt": "2026-08-07",
+      "dueAt": "2026-09-06"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-07T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_020",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1020",
+    "valueCents": 987870,
+    "currency": "USD",
+    "status": "draft",
+    "fields": {
+      "customer": "Stark Supplies",
+      "issuedAt": "2026-07-27",
+      "dueAt": "2026-08-26"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-27T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_021",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1021",
+    "valueCents": 184321,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Vandelay Imports",
+      "issuedAt": "2026-09-09",
+      "dueAt": "2026-10-09"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-09T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_022",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1022",
+    "valueCents": 298439,
+    "currency": "USD",
+    "status": "draft",
+    "fields": {
+      "customer": "Hooli",
+      "issuedAt": "2026-08-30",
+      "dueAt": "2026-09-29"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-30T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_023",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1023",
+    "valueCents": 99999999,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-07-29",
+      "dueAt": "2026-08-28"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-29T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_024",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1024",
+    "valueCents": 506371,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-09-07",
+      "dueAt": "2026-10-07"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-07T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_025",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1025",
+    "valueCents": 928406,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Wonka Retail",
+      "issuedAt": "2026-07-01",
+      "dueAt": "2026-07-31"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-01T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_026",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1026",
+    "valueCents": 764865,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Acme Corp",
+      "issuedAt": "2026-07-18",
+      "dueAt": "2026-08-17"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-18T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_027",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1027",
+    "valueCents": 892782,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-08-30",
+      "dueAt": "2026-09-29"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-30T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_028",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1028",
+    "valueCents": 295696,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Wonka Retail",
+      "issuedAt": "2026-07-03",
+      "dueAt": "2026-08-02"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-03T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_029",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1029",
+    "valueCents": 234327,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-07-15",
+      "dueAt": "2026-08-14"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-15T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_030",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1030",
+    "valueCents": 537553,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-08-07",
+      "dueAt": "2026-09-06"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-07T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_031",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1031",
+    "valueCents": 426012,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Wayne Logistics",
+      "issuedAt": "2026-09-16",
+      "dueAt": "2026-10-16"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-16T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_032",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1032",
+    "valueCents": 313405,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-08-20",
+      "dueAt": "2026-09-19"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-20T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_033",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1033",
+    "valueCents": 295608,
+    "currency": "USD",
+    "status": "paid",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-08-27",
+      "dueAt": "2026-09-26"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-27T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_034",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1034",
+    "valueCents": 409402,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Initech",
+      "issuedAt": "2026-07-11",
+      "dueAt": "2026-08-10"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-11T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_035",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1035",
+    "valueCents": 490485,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Soylent Foods",
+      "issuedAt": "2026-08-11",
+      "dueAt": "2026-09-10"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-11T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_036",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1036",
+    "valueCents": 213910,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Soylent Foods",
+      "issuedAt": "2026-08-07",
+      "dueAt": "2026-09-06"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-07T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_037",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1037",
+    "valueCents": 576390,
+    "currency": "USD",
+    "status": "sent",
+    "fields": {
+      "customer": "Soylent Foods",
+      "issuedAt": "2026-09-15",
+      "dueAt": "2026-10-15"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-15T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_038",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1038",
+    "valueCents": 502367,
+    "currency": "USD",
+    "status": "overdue",
+    "fields": {
+      "customer": "Stark Supplies",
+      "issuedAt": "2026-07-18",
+      "dueAt": "2026-08-17"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-18T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_039",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1039",
+    "valueCents": 1057986,
+    "currency": "USD",
+    "status": "draft",
+    "fields": {
+      "customer": "Acme Corp",
+      "issuedAt": "2026-09-12",
+      "dueAt": "2026-10-12"
+    },
+    "version": 1,
+    "updatedAt": "2026-09-12T09:00:00.000Z"
+  },
+  {
+    "id": "rec_inv_040",
+    "folderId": "fld_q3_invoices",
+    "name": "INV-2026-1040",
+    "valueCents": 645582,
+    "currency": "USD",
+    "status": "paid",
+    "fields": {
+      "customer": "Wonka Retail",
+      "issuedAt": "2026-07-15",
+      "dueAt": "2026-08-14"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-15T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_001",
+    "folderId": "fld_products",
+    "name": "Standing Desk",
+    "valueCents": 77489,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05001",
+      "stock": 158,
+      "category": "Office"
+    },
+    "version": 2,
+    "updatedAt": "2026-09-09T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_002",
+    "folderId": "fld_products",
+    "name": "Ergonomic Chair",
+    "valueCents": 57539,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05002",
+      "stock": 88,
+      "category": "Electronics"
+    },
+    "version": 2,
+    "updatedAt": "2026-09-09T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_003",
+    "folderId": "fld_products",
+    "name": "Monitor Arm",
+    "valueCents": 64994,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05003",
+      "stock": 87,
+      "category": "Office"
+    },
+    "version": 2,
+    "updatedAt": "2026-09-09T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_004",
+    "folderId": "fld_products",
+    "name": "USB-C Dock",
+    "valueCents": 30999,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05004",
+      "stock": 212,
+      "category": "Furniture"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-23T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_005",
+    "folderId": "fld_products",
+    "name": "Mechanical Keyboard",
+    "valueCents": 3699,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05005",
+      "stock": 21,
+      "category": "Accessories"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-14T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_006",
+    "folderId": "fld_products",
+    "name": "Wireless Mouse",
+    "valueCents": 86199,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05006",
+      "stock": 220,
+      "category": "Electronics"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-13T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_007",
+    "folderId": "fld_products",
+    "name": "Desk Lamp",
+    "valueCents": 14699,
+    "currency": "USD",
+    "status": "archived",
+    "fields": {
+      "sku": "SKU-05007",
+      "stock": 68,
+      "category": "Furniture"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-03T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_008",
+    "folderId": "fld_products",
+    "name": "Cable Tray",
+    "valueCents": 27599,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05008",
+      "stock": 110,
+      "category": "Accessories"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-13T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_009",
+    "folderId": "fld_products",
+    "name": "Laptop Stand",
+    "valueCents": 71899,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05009",
+      "stock": 196,
+      "category": "Furniture"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-10T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_010",
+    "folderId": "fld_products",
+    "name": "Webcam HD",
+    "valueCents": 47599,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05010",
+      "stock": 111,
+      "category": "Electronics"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-29T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_011",
+    "folderId": "fld_products",
+    "name": "Noise-Cancelling Headset",
+    "valueCents": 39399,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05011",
+      "stock": 83,
+      "category": "Electronics"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-10T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_012",
+    "folderId": "fld_products",
+    "name": "Footrest",
+    "valueCents": 46399,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05012",
+      "stock": 67,
+      "category": "Accessories"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-03T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_013",
+    "folderId": "fld_products",
+    "name": "Whiteboard",
+    "valueCents": 58999,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05013",
+      "stock": 109,
+      "category": "Furniture"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-01T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_014",
+    "folderId": "fld_products",
+    "name": "Document Scanner",
+    "valueCents": 14999,
+    "currency": "USD",
+    "status": "archived",
+    "fields": {
+      "sku": "SKU-05014",
+      "stock": 236,
+      "category": "Furniture"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-23T09:00:00.000Z"
+  },
+  {
+    "id": "rec_prd_015",
+    "folderId": "fld_products",
+    "name": "Label Printer",
+    "valueCents": 39899,
+    "currency": "USD",
+    "status": "active",
+    "fields": {
+      "sku": "SKU-05015",
+      "stock": 126,
+      "category": "Furniture"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-20T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_001",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-001",
+    "valueCents": 179714,
+    "currency": "EUR",
+    "status": "sent",
+    "fields": {
+      "customer": "Vandelay Imports",
+      "issuedAt": "2026-07-05",
+      "dueAt": "2026-07-19"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-05T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_002",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-002",
+    "valueCents": 83116,
+    "currency": "EUR",
+    "status": "overdue",
+    "fields": {
+      "customer": "Vandelay Imports",
+      "issuedAt": "2026-08-18",
+      "dueAt": "2026-09-01"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-18T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_003",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-003",
+    "valueCents": 328734,
+    "currency": "EUR",
+    "status": "sent",
+    "fields": {
+      "customer": "Soylent Foods",
+      "issuedAt": "2026-08-26",
+      "dueAt": "2026-09-09"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-26T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_004",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-004",
+    "valueCents": 111891,
+    "currency": "EUR",
+    "status": "draft",
+    "fields": {
+      "customer": "Acme Corp",
+      "issuedAt": "2026-08-15",
+      "dueAt": "2026-08-29"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-15T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_005",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-005",
+    "valueCents": 141971,
+    "currency": "EUR",
+    "status": "paid",
+    "fields": {
+      "customer": "Hooli",
+      "issuedAt": "2026-07-06",
+      "dueAt": "2026-07-20"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-06T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_006",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-006",
+    "valueCents": 391827,
+    "currency": "EUR",
+    "status": "draft",
+    "fields": {
+      "customer": "Umbrella Health",
+      "issuedAt": "2026-08-18",
+      "dueAt": "2026-09-01"
+    },
+    "version": 1,
+    "updatedAt": "2026-08-18T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_007",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-007",
+    "valueCents": 149446,
+    "currency": "EUR",
+    "status": "paid",
+    "fields": {
+      "customer": "Wayne Logistics",
+      "issuedAt": "2026-07-30",
+      "dueAt": "2026-08-13"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-30T09:00:00.000Z"
+  },
+  {
+    "id": "rec_bob_008",
+    "folderId": "fld_bob_invoices",
+    "name": "BOB-2026-008",
+    "valueCents": 380505,
+    "currency": "EUR",
+    "status": "overdue",
+    "fields": {
+      "customer": "Initech",
+      "issuedAt": "2026-07-18",
+      "dueAt": "2026-08-01"
+    },
+    "version": 1,
+    "updatedAt": "2026-07-18T09:00:00.000Z"
+  }
+]

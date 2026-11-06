@@ -1,0 +1,12 @@
+[
+  {
+    "folderId": "fld_q3_invoices",
+    "userId": "usr_bob",
+    "role": "editor"
+  },
+  {
+    "folderId": "fld_q3_invoices",
+    "userId": "usr_carol",
+    "role": "viewer"
+  }
+]

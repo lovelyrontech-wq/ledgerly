@@ -1,0 +1,23 @@
+[
+  {
+    "id": "fld_q3_invoices",
+    "name": "Q3 2026 Invoices",
+    "type": "invoice",
+    "ownerId": "usr_alice",
+    "createdAt": "2026-07-01T09:00:00.000Z"
+  },
+  {
+    "id": "fld_products",
+    "name": "Product Catalog",
+    "type": "product",
+    "ownerId": "usr_alice",
+    "createdAt": "2026-07-02T09:00:00.000Z"
+  },
+  {
+    "id": "fld_bob_invoices",
+    "name": "Bob's Consulting Invoices",
+    "type": "invoice",
+    "ownerId": "usr_bob",
+    "createdAt": "2026-07-03T09:00:00.000Z"
+  }
+]

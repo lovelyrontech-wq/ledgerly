@@ -1,0 +1,12 @@
+[
+  {
+    "id": "bat_seed_001",
+    "folderId": "fld_products",
+    "createdBy": "usr_alice",
+    "status": "applied",
+    "instruction": "increase prices of the first 3 products by 5%",
+    "idempotencyKey": "seed-idem-001",
+    "createdAt": "2026-09-09T09:00:00.000Z",
+    "appliedAt": "2026-09-09T09:00:00.000Z"
+  }
+]
