@@ -1,6 +1,7 @@
 """Request and response bodies. JSON uses camelCase for the Next.js frontend."""
 from __future__ import annotations
 
+from decimal import Decimal
 from datetime import UTC, datetime
 from typing import Annotated, Any
 
@@ -70,4 +71,40 @@ class RecordUpdate(ApiModel):
 
 class ErrorOut(ApiModel):
     detail: str
+class PreviewRequest(ApiModel):
+    """Change every matching record's value by `percent` (10 = +10%, -5 = -5%)."""
+
+    percent: Decimal = Field(ge=-100, le=1000, max_digits=7, decimal_places=2)
+    instruction: str = Field(min_length=1, max_length=500)
+    status: str | None = Field(default=None, max_length=20)
+
+
+class ApplyRequest(ApiModel):
+    # The previewHash from the preview the user approved.
+    preview_hash: str = Field(min_length=64, max_length=64)
+
+class BatchItemOut(ApiModel):
+    record_id: str
+    record_name: str
+    field: str
+    before: int
+    after: int
+    expected_version: int
+    result: str | None
+    error: str | None
+
+class BatchOut(ApiModel):
+    id: str
+    folder_id: str
+    created_by: str
+    status: str
+    instruction: str
+    preview_hash: str
+    created_at: UtcDateTime
+    expires_at: UtcDateTime | None
+    applied_at: UtcDateTime | None
+    undone_at: UtcDateTime | None
+    # Count of items per result, e.g. {"applied": 39, "skipped_changed": 1}
+    summary: dict[str, int]
+    items: list[BatchItemOut]
 

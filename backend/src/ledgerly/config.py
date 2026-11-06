@@ -32,6 +32,9 @@ class Settings(BaseSettings):
      # Browser origins allowed to call the API (the Next.js dev server).
     cors_origins: list[str] = ["http://localhost:3000"]
 
+    # How long a bulk-update preview can be approved before it expires.
+    batch_preview_ttl_minutes: int = 15
+
     ollama_base_url: str = "http://localhost:11434"
     ollama_chat_model: str = "qwen2.5:7b-instruct"
     ollama_embed_model: str = "nomic-embed-text"

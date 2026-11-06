@@ -12,11 +12,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session, sessionmaker
 
-from ledgerly.api.routes import auth, folders, records
+from ledgerly.api.routes import auth, folders, records, batches
 from ledgerly.config import Settings, get_settings
 from ledgerly.db.session import session_factory as default_session_factory
 from ledgerly.permissions import FolderNotFound, PermissionDenied
 from ledgerly.security import MIN_SECRET_LENGTH
+
+# 2. add an import under "from ledgerly.security import MIN_SECRET_LENGTH":
+from ledgerly.services.batches import BatchConflict, BatchNotFound
 
 def create_app(
     settings: Settings | None = None,
@@ -53,6 +56,15 @@ def create_app(
             content={"detail": f"You need {exc.required.label} access to do this (you are {exc.actual.label})"},
         )
 
+    # 3. add these handlers next to the other two exception handlers:
+    @app.exception_handler(BatchNotFound)
+    def _batch_not_found(_: Request, __: BatchNotFound) -> JSONResponse:
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": "Batch not found"})
+
+    @app.exception_handler(BatchConflict)
+    def _batch_conflict(_: Request, exc: BatchConflict) -> JSONResponse:
+        return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"detail": str(exc)})
+
     @app.get("/api/health", tags=["health"])
     def health() -> dict[str, str]:
         return {"status": "ok"}
@@ -60,4 +72,5 @@ def create_app(
     app.include_router(auth.router)
     app.include_router(folders.router)
     app.include_router(records.router)
+    app.include_router(batches.router)
     return app
