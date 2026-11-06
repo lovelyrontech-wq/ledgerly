@@ -8,36 +8,38 @@ Diagrams are written in Mermaid. They render on GitHub, GitLab, and in VS Code w
 flowchart LR
     user(["User<br/>(browser)"])
 
-    subgraph web["apps/web — Next.js"]
-        direction TB
+    subgraph web["apps/web — Next.js (TypeScript, UI only)"]
         ui["UI<br/>folders, records,<br/>chat panel, preview dialog"]
+    end
+
+    subgraph backend["backend — Python"]
+        direction TB
         auth["Auth<br/>session login"]
-        agent["Agent runtime<br/>tool-calling loop"]
-        api["REST API<br/>/api/folders, /api/records,<br/>/api/batches, /api/audit"]
+        agent["Agent<br/>Ollama tool-calling loop"]
+        api["FastAPI REST API<br/>/api/folders, /api/records,<br/>/api/batches, /api/audit"]
         perms["Permission checks<br/>owner / editor / viewer"]
         svc["Services<br/>records, batches,<br/>idempotency, audit"]
-        obs["Observability<br/>tracing + feedback"]
+        obs["Observability<br/>LangSmith tracing + feedback"]
+        subgraph mcp["mcp_server"]
+            tools["MCP tools<br/>list_records<br/>preview_bulk_update<br/>apply_bulk_update<br/>undo_batch<br/>search_help_docs"]
+            client["REST client<br/>uses the user's token"]
+        end
+        subgraph kb["knowledge"]
+            index[("Vector index")]
+        end
     end
 
-    subgraph mcp["packages/mcp-server"]
-        tools["MCP tools<br/>list_records<br/>preview_bulk_update<br/>apply_bulk_update<br/>undo_batch<br/>search_help_docs"]
-        client["REST client<br/>uses the user's token"]
-    end
-
-    subgraph kb["packages/knowledge"]
-        docs[("Help docs<br/>Markdown")]
-        index[("Vector index")]
-    end
+    docs[("data/help-docs<br/>Markdown")]
 
     subgraph local["Local machine"]
         ollama["Ollama<br/>chat: qwen2.5:7b-instruct<br/>embed: nomic-embed-text"]
     end
 
-    db[("Database<br/>Postgres / SQLite<br/>users, folders, records,<br/>batches, batch_items, audit_log")]
+    db[("Database (SQLAlchemy)<br/>Postgres / SQLite<br/>users, folders, records,<br/>batches, batch_items, audit_log")]
     langsmith["LangSmith<br/>hosted or self-hosted"]
 
     user -->|"HTTPS"| ui
-    ui --> auth
+    ui -->|"login"| auth
     ui -->|"chat message"| agent
     ui -->|"approve / cancel"| api
     agent -->|"chat + tool schemas"| ollama
@@ -68,21 +70,21 @@ flowchart LR
 sequenceDiagram
     autonumber
     actor U as User
-    participant UI as Web UI
+    participant UI as Web UI (Next.js)
     participant AG as Agent
     participant LLM as Ollama
     participant MCP as MCP server
-    participant API as REST API
+    participant API as REST API (FastAPI)
     participant DB as Database
 
     U->>UI: "update the values in this folder by 10%"
-    UI->>AG: chat message + folderId
+    UI->>AG: chat message + folder_id
     AG->>LLM: prompt + tool schemas
-    LLM-->>AG: call preview_bulk_update(folderId, +10%)
+    LLM-->>AG: call preview_bulk_update(folder_id, +10%)
     AG->>MCP: preview_bulk_update
     MCP->>API: POST /api/batches/preview (user token)
     API->>API: check user can edit folder
-    API->>DB: read 40 records (id, valueCents, version)
+    API->>DB: read 40 records (id, value_cents, version)
     API->>DB: save batch (status: pending) + batch_items (old → new, version)
     API->>DB: audit_log: batch.preview
     API-->>MCP: previewId + 40 rows (old → new)
@@ -116,8 +118,8 @@ sequenceDiagram
 
     opt user asks "undo that"
         U->>AG: "undo the last change"
-        AG->>MCP: undo_batch(batchId)
-        MCP->>API: POST /api/batches/{batchId}/undo
+        AG->>MCP: undo_batch(batch_id)
+        MCP->>API: POST /api/batches/{batch_id}/undo
         API->>DB: restore old values where version still matches
         API->>DB: audit_log: batch.undo
         API-->>AG: per-record undo results
@@ -168,24 +170,24 @@ erDiagram
         string id PK
         string email
         string name
-        string passwordHash
+        string password_hash
     }
     FOLDER {
         string id PK
         string name
         string type "invoice | product"
-        string ownerId FK
+        string owner_id FK
     }
     FOLDER_PERMISSION {
-        string folderId FK
-        string userId FK
+        string folder_id FK
+        string user_id FK
         string role "editor | viewer"
     }
     RECORD {
         string id PK
-        string folderId FK
+        string folder_id FK
         string name
-        int valueCents
+        int value_cents
         string currency
         string status
         json fields
@@ -193,25 +195,25 @@ erDiagram
     }
     BATCH {
         string id PK
-        string folderId FK
-        string createdBy FK
+        string folder_id FK
+        string created_by FK
         string status "pending | applied | undone | expired"
         string instruction
-        string idempotencyKey
+        string idempotency_key
     }
     BATCH_ITEM {
-        string batchId FK
-        string recordId FK
+        string batch_id FK
+        string record_id FK
         int before
         int after
-        int expectedVersion
+        int expected_version
         string result
     }
     AUDIT_LOG {
         string id PK
-        string userId FK
+        string user_id FK
         string action
-        string batchId FK
+        string batch_id FK
         json details
         datetime at
     }

@@ -5,49 +5,59 @@ A mini SaaS app with folders of records (invoices, products) and an in-app agent
 - Use case and guardrails: [docs/USE_CASE.md](docs/USE_CASE.md)
 - Architecture diagrams: [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md)
 
+| Part | Where | Stack |
+|------|-------|-------|
+| Backend: API, MCP server, agent, RAG, tracing | `backend/` | Python 3.12+, FastAPI, SQLAlchemy, Alembic |
+| Web UI | `apps/web/` | Next.js (TypeScript), UI only (step 3) |
+| Sample data and help docs | `data/` | JSON and Markdown |
+
 ## Requirements
 
-- Node.js 20 or later (developed on Node 24, npm 11)
-- Ollama, from step 5 onward
+- Python 3.12 or later
+- [uv](https://docs.astral.sh/uv/) for Python packages
+- Node.js 20+ for the web UI (from step 3)
+- Ollama (from step 5)
 
-## Setup
+## Backend setup
 
 ```bash
-npm install
+cd backend
 
-# npm 11 blocks package install scripts by default. Prisma needs its script to download
-# its database engine. The allowed packages are listed under "allowScripts" in package.json.
-npm approve-scripts prisma @prisma/client @prisma/engines esbuild
-npm rebuild prisma @prisma/client @prisma/engines esbuild
+# Install dependencies into backend/.venv
+uv sync
 
-# Settings. The SQLite file is created at packages/db/prisma/dev.db.
-# Edit packages/db/.env and set SEED_DEMO_PASSWORD (used for all demo logins).
-# .env is git-ignored: never commit it. Only .env.example is committed.
-cp .env.example packages/db/.env
+# Settings. Edit backend/.env and set SEED_DEMO_PASSWORD (used for all demo logins).
+# backend/.env is git-ignored: never commit it. Only .env.example is committed.
+cp .env.example .env
 
-# Create the database from the schema, generate the Prisma client, and load the sample data.
-npm run db:migrate -- --name init
+# Create the database (SQLite file at backend/dev.db) and load the sample data
+uv run alembic upgrade head
+uv run python -m ledgerly.db.seed
 
-# Check the database contents.
-npm run verify -w @ledgerly/db
+# Check the database contents
+uv run python -m ledgerly.db.verify
 ```
 
-## Database commands
+## Backend commands
+
+Run from `backend/`.
 
 | Command | What it does |
 |---------|--------------|
-| `npm run db:migrate -- --name <name>` | After editing `schema.prisma`: create a migration and apply it |
-| `npm run db:seed` | Reload the sample data. Clears the tables first, so it is safe to re-run |
-| `npm run db:reset` | Drop the database, re-apply all migrations, and seed |
-| `npm run db:studio` | Open Prisma Studio to browse the data in the browser |
-| `npm run sample-data` | Regenerate the JSON in `packages/db/seed/` from `scripts/generate-sample-data.mjs` |
-| `npm run verify -w @ledgerly/db` | Check record counts and the seeded batch |
+| `uv run alembic upgrade head` | Apply all migrations |
+| `uv run alembic revision --autogenerate -m "<what changed>"` | After editing `src/ledgerly/db/models.py`: create a migration. Review it before committing |
+| `uv run alembic check` | Fail if the models and migrations are out of sync |
+| `uv run python -m ledgerly.db.seed` | Reload the sample data. Clears the tables first, so it is safe to re-run |
+| `uv run python -m ledgerly.db.verify` | Check record counts, the seeded batch, and demo logins |
+| `uv run pytest` | Run tests (each test builds a fresh database from the migrations) |
+| `uv run ruff check src tests` | Lint |
+| `uv run mypy src` | Type check (strict) |
 
-Always pass `--name` to `db:migrate`. Without it, Prisma waits for a name to be typed, which hangs in scripts and CI.
+From the repo root, `python scripts/generate_sample_data.py` regenerates `data/seed/*.json`. Output is always the same.
 
 ## Demo logins
 
-All demo users log in with the `SEED_DEMO_PASSWORD` you set in `packages/db/.env`.
+All demo users log in with the `SEED_DEMO_PASSWORD` you set in `backend/.env`.
 
 | User | Email |
 |------|-------|
@@ -57,4 +67,18 @@ All demo users log in with the `SEED_DEMO_PASSWORD` you set in `packages/db/.env
 
 ## Switching to Postgres
 
-In `packages/db/prisma/schema.prisma`, change `provider = "sqlite"` to `provider = "postgresql"`. Set `DATABASE_URL` to a `postgres://` URL. Delete `packages/db/prisma/migrations/` (SQLite migrations don't run on Postgres), then run `npm run db:migrate -- --name init`.
+1. Add a driver: `uv add "psycopg[binary]"`.
+2. Set `DATABASE_URL=postgresql+psycopg://user:pass@localhost:5432/ledgerly` in `backend/.env`.
+3. Run `uv run alembic upgrade head` and the seed.
+
+The same migrations work on both databases (JSON columns become `JSONB` on Postgres).
+
+## Roadmap
+
+1. ~~Workspace, database schema, sample data~~ (done)
+2. REST API with permissions and preview / apply / undo, with integration tests
+3. Next.js UI: login, folders, records, preview/approve dialog
+4. MCP server wrapping the API
+5. Agent on Ollama
+6. Help-doc search (RAG)
+7. LangSmith tracing, feedback, and evals
