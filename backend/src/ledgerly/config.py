@@ -5,11 +5,10 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
+from typing import Annotated, Literal
+
 from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
-
-from typing import Annotated
-
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 REPO_ROOT = BACKEND_DIR.parent
@@ -48,7 +47,7 @@ class Settings(BaseSettings):
     ollama_chat_model: str = "qwen2.5:7b-instruct"
     ollama_embed_model: str = "nomic-embed-text"
 
-     # Help search: "hybrid" (keywords + embeddings), "vector" (embeddings only) or "bm25" (keywords only).
+    # Help search: "hybrid" (keywords + embeddings), "vector" (embeddings only) or "bm25" (keywords only).
     # hybrid and vector fall back to bm25 when Ollama is down.
     help_search_mode: Literal["hybrid", "vector", "bm25"] = "hybrid"
     # How much keyword matches count in hybrid search, next to embeddings (1.0).
@@ -73,7 +72,7 @@ class Settings(BaseSettings):
     agent_think: bool = False  # reasoning models (qwen3) think before answering; off is much faster
     agent_max_conversations: int = 500  # kept in memory; the oldest is dropped first
 
-     # LangGraph engine: where paused conversations (checkpoints) are saved. Relative to backend/.
+    # LangGraph engine: where paused conversations (checkpoints) are saved. Relative to backend/.
     agent_checkpoint_db: str = "agent-checkpoints.db"
 
     @property

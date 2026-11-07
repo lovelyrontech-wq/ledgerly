@@ -1,0 +1,1 @@
+[{"id":"fld_products","name":"Product Catalog","type":"product","ownerId":"usr_alice","role":"owner","createdAt":"2026-07-02T09:00:00Z"},{"id":"fld_q3_invoices","name":"Q3 2026 Invoices","type":"invoice","ownerId":"usr_alice","role":"owner","createdAt":"2026-07-01T09:00:00Z"}]

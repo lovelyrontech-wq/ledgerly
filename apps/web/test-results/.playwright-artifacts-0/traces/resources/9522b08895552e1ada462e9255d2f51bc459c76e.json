@@ -1,0 +1,1 @@
+{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfYWxpY2UiLCJpYXQiOjE3OTQwNzYwNzAsImV4cCI6MTc5NDEwNDg3MH0.UKtpJADlN_tXZyRRb7pJIhEYwJ84QIa6QB4Utv13X0Y","tokenType":"bearer","expiresIn":28800,"user":{"id":"usr_alice","email":"alice@ledgerly.test","name":"Alice Owner"}}

@@ -14,7 +14,6 @@ from __future__ import annotations
 from collections.abc import Iterator
 from contextlib import contextmanager
 from decimal import Decimal
-from pathlib import Path
 from typing import Any
 
 from mcp.server.mcpserver.exceptions import ToolError
@@ -22,7 +21,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ledgerly.db.models import Batch, LedgerRecord
-from ledgerly.knowledge.help_docs import HelpDocs
+from ledgerly.knowledge.hybrid import HybridHelpSearch
 from ledgerly.permissions import FolderNotFound, PermissionDenied, Role, accessible_folders, require_folder
 from ledgerly.services import batches
 
@@ -164,9 +163,12 @@ def undo_batch(session: Session, user_id: str, batch_id: str) -> dict[str, Any]:
     return _batch_result(batch, message)
 
 
-def search_help_docs(docs_dir: Path, query: str, limit: int = 3) -> dict[str, Any]:
-    results = HelpDocs.load(docs_dir).search(query, limit=max(1, min(limit, 5)))
+async def search_help_docs(search: HybridHelpSearch, query: str, limit: int = 3) -> dict[str, Any]:
+    response = await search.search(query, limit=max(1, min(limit, 5)))
     return {
         "query": query,
-        "results": [{"title": r.title, "source": r.source, "text": r.text, "score": r.score} for r in results],
+        "mode": response.mode,  # "hybrid", "vector", or "bm25" when embeddings are off or Ollama is down
+        "results": [
+            {"title": r.title, "source": r.source, "text": r.text, "score": r.score} for r in response.results
+        ],
     }

@@ -1,0 +1,73 @@
+"use client";
+
+import { Menu } from "lucide-react";
+import Link from "next/link";
+import { Suspense, useState, type ReactNode } from "react";
+
+import { FolderList } from "@/components/records/folder-list";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import { UserMenu } from "./user-menu";
+
+function FolderNavFallback() {
+  return (
+    <div className="grid gap-2 p-3">
+      <Skeleton className="h-8" />
+      <Skeleton className="h-8" />
+      <Skeleton className="h-8" />
+    </div>
+  );
+}
+
+/**
+ * Header + folder sidebar.
+ * - md and up: the sidebar is always visible on the left.
+ * - below md: the sidebar moves into a slide-in sheet opened from the menu button.
+ */
+export function AppShell({ children }: { children: ReactNode }) {
+  const [navOpen, setNavOpen] = useState(false);
+
+  return (
+    <div className="flex min-h-dvh flex-col">
+      <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/80 sm:px-4">
+        <Sheet open={navOpen} onOpenChange={setNavOpen}>
+          <SheetTrigger render={<Button variant="ghost" size="icon" className="md:hidden" aria-label="Open folders" />}>
+            <Menu />
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72 p-0">
+            <SheetHeader className="border-b">
+              <SheetTitle>Folders</SheetTitle>
+            </SheetHeader>
+            {/* Active-link highlighting reads the URL, so it needs a Suspense boundary. */}
+            <Suspense fallback={<FolderNavFallback />}>
+              <FolderList variant="nav" onNavigate={() => setNavOpen(false)} />
+            </Suspense>
+          </SheetContent>
+        </Sheet>
+
+        <Link href="/folders" className="font-semibold tracking-tight">
+          Ledgerly
+        </Link>
+        <div className="ml-auto">
+          <UserMenu />
+        </div>
+      </header>
+
+      <div className="flex min-h-0 flex-1">
+        <aside className="hidden w-64 shrink-0 border-r md:block" aria-label="Folders">
+          <div className="sticky top-14 max-h-[calc(100dvh-3.5rem)] overflow-y-auto">
+            <p className="px-4 pt-4 pb-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              Folders
+            </p>
+            <Suspense fallback={<FolderNavFallback />}>
+              <FolderList variant="nav" />
+            </Suspense>
+          </div>
+        </aside>
+        <main className="min-w-0 flex-1">{children}</main>
+      </div>
+    </div>
+  );
+}
