@@ -48,7 +48,13 @@ class Settings(BaseSettings):
     ollama_chat_model: str = "qwen2.5:7b-instruct"
     ollama_embed_model: str = "nomic-embed-text"
 
-        # How long Ollama keeps the model loaded after a request ("30m", "-1" = forever).
+     # Help search: "hybrid" (keywords + embeddings), "vector" (embeddings only) or "bm25" (keywords only).
+    # hybrid and vector fall back to bm25 when Ollama is down.
+    help_search_mode: Literal["hybrid", "vector", "bm25"] = "hybrid"
+    # How much keyword matches count in hybrid search, next to embeddings (1.0).
+    help_search_bm25_weight: float = 0.5
+
+    # How long Ollama keeps the model loaded after a request ("30m", "-1" = forever).
     ollama_keep_alive: str = "30m"
     # Context window in tokens. Ollama's default (4096) is too small for tool schemas + history.
     ollama_num_ctx: int = 8192

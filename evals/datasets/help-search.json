@@ -1,0 +1,14 @@
+[
+  { "id": "undo-direct", "query": "how do I undo a bulk update?", "expected": ["undo-and-history.md"] },
+  { "id": "undo-paraphrase", "query": "revert the price change I made by mistake", "expected": ["undo-and-history.md"] },
+  { "id": "share-paraphrase", "query": "give my accountant read-only access to a folder", "expected": ["sharing-and-permissions.md"] },
+  { "id": "who-approves", "query": "who is allowed to approve changes?", "expected": ["sharing-and-permissions.md", "bulk-updates.md"] },
+  { "id": "import-paraphrase", "query": "can I upload a spreadsheet of invoices?", "expected": ["import-export.md"] },
+  { "id": "export-paraphrase", "query": "download all my records to a file", "expected": ["import-export.md"] },
+  { "id": "rounding", "query": "how are cents rounded?", "expected": ["bulk-updates.md"] },
+  { "id": "concurrent-edit", "query": "what if a colleague edits a record while I am reviewing the change?", "expected": ["bulk-updates.md"] },
+  { "id": "new-folder", "query": "make a new folder for my products", "expected": ["getting-started.md"] },
+  { "id": "invoice-statuses", "query": "what statuses can an invoice have?", "expected": ["record-fields.md"] },
+  { "id": "audit-paraphrase", "query": "where can I see who changed what and when?", "expected": ["undo-and-history.md"] },
+  { "id": "late-invoices", "query": "raise only the late invoices", "expected": ["bulk-updates.md"] }
+]

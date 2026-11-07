@@ -23,6 +23,9 @@ from pydantic import Field
 from sqlalchemy.orm import Session, sessionmaker
 
 from ledgerly.config import Settings
+from ledgerly.knowledge.embeddings import OllamaEmbedder
+from ledgerly.knowledge.help_docs import HelpDocs
+from ledgerly.knowledge.hybrid import HybridHelpSearch
 from ledgerly.mcp_server import tools
 from ledgerly.security import InvalidTokenError, decode_access_token
 
@@ -62,6 +65,7 @@ def build_server(
     settings: Settings,
     session_factory: sessionmaker[Session],
     current_user: Callable[[], str] = user_from_token,
+    help_search: HybridHelpSearch | None = None,
 ) -> MCPServer:
     """Create the server. Tests pass their own `current_user`; in production it comes from the token."""
     secret = settings.auth_secret.get_secret_value() if settings.auth_secret else ""
@@ -75,6 +79,16 @@ def build_server(
             validate_token_resource=False,  # our verifier checks the token itself
         ),
     )
+
+    if help_search is None:
+        help_search = HybridHelpSearch(
+            HelpDocs.load(settings.data_dir / "help-docs"),
+            OllamaEmbedder(settings),
+            mode=settings.help_search_mode,
+            bm25_weight=settings.help_search_bm25_weight,
+        )
+    search = help_search
+
     read_only = ToolAnnotations(readOnlyHint=True, openWorldHint=False)
 
     @server.tool(annotations=read_only)
@@ -135,12 +149,11 @@ def build_server(
             return tools.undo_batch(session, current_user(), batch_id)
 
     @server.tool(annotations=read_only)
-    def search_help_docs(
+    async def search_help_docs(
         query: Annotated[str, Field(min_length=1, max_length=300)],
         limit: Annotated[int, Field(ge=1, le=5)] = 3,
     ) -> dict[str, Any]:
         """Search Ledgerly's help articles. Use for how-to questions."""
         current_user()  # signed-in users only
-        return tools.search_help_docs(settings.data_dir / "help-docs", query, limit)
-
+        return await tools.search_help_docs(search, query, limit)
     return server
