@@ -63,6 +63,16 @@ class Settings(BaseSettings):
     agent_think: bool = False  # reasoning models (qwen3) think before answering; off is much faster
     agent_max_conversations: int = 500  # kept in memory; the oldest is dropped first
 
+     # LangGraph engine: where paused conversations (checkpoints) are saved. Relative to backend/.
+    agent_checkpoint_db: str = "agent-checkpoints.db"
+
+    @property
+    def resolved_checkpoint_db(self) -> str:
+        path = self.agent_checkpoint_db
+        if path == ":memory:" or Path(path).is_absolute():
+            return path
+        return (BACKEND_DIR / path).as_posix()
+    
     @property
     def resolved_database_url(self) -> str:
         """Relative SQLite paths are resolved against backend/, so the DB file is the same

@@ -55,7 +55,8 @@ class PlainEngine:
                     conversation.pending_batch_id = outcome.data["batchId"]
                     yield ApprovalRequiredEvent(outcome.data["batchId"], outcome.data)
 
-        run.stop = "max_steps"
+        # Out of steps. A preview made on the way still waits for the user.
+        run.stop = "approval_required" if conversation.pending_batch_id else "max_steps"
 
     async def approve(self, run: AgentRun, batch_id: str, approval_code: str) -> AsyncIterator[AgentEvent]:
         # No model call: the user already decided. The approval code goes to the tool only,

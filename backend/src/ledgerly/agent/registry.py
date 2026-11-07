@@ -20,8 +20,18 @@ def _plain(settings: Settings) -> AgentEngine:
     return PlainEngine(max_steps=settings.agent_max_steps)
 
 
-# name -> builder. The LangGraph engine is added in step 5b.
-KNOWN_ENGINES: dict[str, Callable[[Settings], AgentEngine]] = {"plain": _plain}
+def _langgraph(settings: Settings) -> AgentEngine:
+    try:
+        from ledgerly.agent.engines.langgraph import LangGraphEngine
+    except ImportError as exc:  # the optional extra is not installed
+        raise RuntimeError(
+            "The langgraph engine is enabled but LangGraph is not installed. Run: uv sync --extra langgraph"
+        ) from exc
+    return LangGraphEngine(settings.resolved_checkpoint_db, max_steps=settings.agent_max_steps)
+
+
+# name -> builder. Builders import their engine only when it is enabled.
+KNOWN_ENGINES: dict[str, Callable[[Settings], AgentEngine]] = {"plain": _plain, "langgraph": _langgraph}
 
 def build_engines(settings: Settings) -> dict[str, AgentEngine]:
     """Build every enabled engine. Called at startup, so a bad flag stops the app right away."""

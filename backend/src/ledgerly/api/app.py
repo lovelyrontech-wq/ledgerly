@@ -25,7 +25,8 @@ from ledgerly.security import MIN_SECRET_LENGTH
 
 # 2. add an import under "from ledgerly.security import MIN_SECRET_LENGTH":
 from ledgerly.services.batches import BatchConflict, BatchNotFound
-
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 
 def create_app(
     settings: Settings | None = None,
@@ -40,7 +41,16 @@ def create_app(
             'Generate one with: python -c "import secrets; print(secrets.token_urlsafe(32))"'
         )
 
-    app = FastAPI(title="Ledgerly API", version="0.1.0")
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        yield
+        # Close what engines opened (the LangGraph checkpoint database).
+        for engine in app.state.agent.engines.values():
+            close = getattr(engine, "aclose", None)
+            if close is not None:
+                await close()
+
+    app = FastAPI(title="Ledgerly API", version="0.1.0", lifespan=lifespan)
     app.state.settings = settings
     app.state.session_factory = session_factory or default_session_factory()
 

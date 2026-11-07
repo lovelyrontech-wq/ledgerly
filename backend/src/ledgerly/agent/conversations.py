@@ -14,6 +14,15 @@ from typing import Any
 # Messages kept per conversation (besides the system prompt). Older ones are dropped.
 MAX_HISTORY_MESSAGES = 40
 
+def keep_recent(messages: list[dict[str, Any]], limit: int = MAX_HISTORY_MESSAGES) -> list[dict[str, Any]]:
+    """The last `limit` messages, cut at a user message so the history never starts with a
+    dangling tool result. Both engines send the model exactly this window."""
+    if len(messages) <= limit:
+        return messages
+    cut = len(messages) - limit
+    while cut < len(messages) and messages[cut]["role"] != "user":
+        cut += 1
+    return messages[cut:]
 
 class ConversationNotFound(Exception):
     pass
@@ -29,12 +38,7 @@ class Conversation:
 
     def add(self, message: dict[str, Any]) -> None:
         self.messages.append(message)
-        if len(self.messages) > MAX_HISTORY_MESSAGES:
-            # Cut at a user message, so the history never starts with a dangling tool result.
-            cut = len(self.messages) - MAX_HISTORY_MESSAGES
-            while cut < len(self.messages) and self.messages[cut]["role"] != "user":
-                cut += 1
-            del self.messages[:cut]
+        self.messages[:] = keep_recent(self.messages)
 
 
 class ConversationStore:
@@ -55,3 +59,4 @@ class ConversationStore:
             raise ConversationNotFound(conversation_id)
         self._items.move_to_end(conversation_id)
         return conversation
+
