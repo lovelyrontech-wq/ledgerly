@@ -74,12 +74,12 @@ class Settings(BaseSettings):
                 return f"{prefix}{(BACKEND_DIR / path).as_posix()}"
         return self.database_url
 
-@field_validator("agent_engines_enabled", mode="before")
-@classmethod
-def _split_engines(cls, value: object) -> object:
-    if isinstance(value, str):
-        return [name.strip() for name in value.split(",") if name.strip()]
-    return value
+    @field_validator("agent_engines_enabled", mode="before")
+    @classmethod
+    def _split_engines(cls, value: object) -> object:
+        if isinstance(value, str):
+            return [name.strip() for name in value.split(",") if name.strip()]
+        return value
 
 @lru_cache
 def get_settings() -> Settings:

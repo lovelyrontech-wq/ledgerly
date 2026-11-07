@@ -57,7 +57,7 @@ class PlainEngine:
 
         run.stop = "max_steps"
 
-     async def approve(self, run: AgentRun, batch_id: str, approval_code: str) -> AsyncIterator[AgentEvent]:
+    async def approve(self, run: AgentRun, batch_id: str, approval_code: str) -> AsyncIterator[AgentEvent]:
         # No model call: the user already decided. The approval code goes to the tool only,
         # never into the conversation the model reads.
         args = {"batch_id": batch_id, "approval_code": approval_code}

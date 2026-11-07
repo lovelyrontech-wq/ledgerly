@@ -48,7 +48,7 @@ def create_app(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         allow_credentials=False,
-        allow_methods=["GET", "POST", s"PATCH", "DELETE"],
+        allow_methods=["GET", "POST", "PATCH", "DELETE"],
         allow_headers=["Authorization", "Content-Type", "Idempotency-Key",  "X-Agent-Engine"],
     )
 
@@ -87,5 +87,5 @@ def create_app(
     app.include_router(folders.router)
     app.include_router(records.router)
     app.include_router(batches.router)
-    app.include_router(batches.agent)
+    app.include_router(agent.router)
     return app
