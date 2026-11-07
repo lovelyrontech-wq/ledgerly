@@ -207,7 +207,8 @@ class LangGraphEngine:
     def chat(self, run: AgentRun, message: str) -> AsyncIterator[AgentEvent]:
         # "answer" unless a node or the interrupt says otherwise.
         run.stop = "answer"
-        new_turn = {"messages": [{"role": "user", "content": message}], "steps": 0, "last_tool_calls": []}
+        messages = [*run.conversation.take_notes(), {"role": "user", "content": message}]
+        new_turn = {"messages": messages, "steps": 0, "last_tool_calls": []}
         return self._stream(new_turn, run, approval_code=None)
 
     def approve(self, run: AgentRun, batch_id: str, approval_code: str) -> AsyncIterator[AgentEvent]:

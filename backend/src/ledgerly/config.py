@@ -53,6 +53,10 @@ class Settings(BaseSettings):
     # Context window in tokens. Ollama's default (4096) is too small for tool schemas + history.
     ollama_num_ctx: int = 8192
 
+    # Longest wait for Ollama to connect or send the next piece of the answer. Without it a hung
+    # Ollama blocks a chat forever. Generous, because the first token on CPU can take minutes.
+    ollama_timeout_seconds: float = 300
+
     # Agent (step 5). AGENT_ENGINE is the default; AGENT_ENGINES_ENABLED lists the engines a request
     # may pick with the X-Agent-Engine header. Comma-separated in .env: plain,langgraph
     agent_engine: str = "plain"

@@ -185,7 +185,7 @@ async def undo(body: AgentBatchRequest, user: CurrentUser, token: TokenDep, agen
         outcome = await toolbox.call("undo_batch", {"batch_id": body.batch_id})
     if not outcome.ok:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=outcome.data.get("error", "Undo failed"))
-    conversation.add(
-        {"role": "assistant", "content": f"Batch {body.batch_id} was undone. Results: {outcome.data.get('summary')}."}
-    )
+    
+    counts = ", ".join(f"{n} {result.replace('_', ' ')}" for result, n in (outcome.data.get("summary") or {}).items())
+    conversation.notes.append(f"The user undid batch {body.batch_id} ({counts}).")
     return outcome.data

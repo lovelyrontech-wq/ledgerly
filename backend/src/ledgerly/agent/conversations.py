@@ -34,7 +34,15 @@ class Conversation:
     engine: str
     messages: list[dict[str, Any]] = field(default_factory=list)  # without the system prompt
     pending_batch_id: str | None = None
+    # Things that happened outside the chat (an undo from the UI). Each engine puts them into the
+    # history at the start of the next turn, so the model knows about them.
+    notes: list[str] = field(default_factory=list)
     lock: asyncio.Lock = field(default_factory=asyncio.Lock)  # one request at a time
+
+    def take_notes(self) -> list[dict[str, Any]]:
+        notes = [{"role": "assistant", "content": note} for note in self.notes]
+        self.notes.clear()
+        return notes
 
     def add(self, message: dict[str, Any]) -> None:
         self.messages.append(message)

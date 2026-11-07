@@ -30,6 +30,7 @@ dev = [
 [project.scripts]
 ledgerly-seed = "ledgerly.db.seed:main"
 ledgerly-verify = "ledgerly.db.verify:main"
+ledgerly-bench-agents = "ledgerly.agent.bench:main"
 
 [project.optional-dependencies]
 langgraph = [

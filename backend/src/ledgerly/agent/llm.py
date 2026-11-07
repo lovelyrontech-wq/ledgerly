@@ -13,7 +13,9 @@ from ledgerly.config import Settings
 
 class OllamaLlm:
     def __init__(self, settings: Settings, client: ollama.AsyncClient | None = None) -> None:
-        self._client = client or ollama.AsyncClient(host=settings.ollama_base_url)
+        self._client = client or ollama.AsyncClient(
+            host=settings.ollama_base_url, timeout=settings.ollama_timeout_seconds
+        )
         self._model = settings.ollama_chat_model
         self._keep_alive = settings.ollama_keep_alive
         self._think = settings.agent_think
@@ -49,5 +51,7 @@ class OllamaLlm:
                 yield LlmChunk(text=part.message.content or "", tool_calls=calls, stats=stats)
         except ollama.ResponseError as exc:
             raise LlmUnavailable(f"The model returned an error: {exc.error}") from exc
+        except httpx.TimeoutException as exc:
+            raise LlmUnavailable("The model took too long to answer (OLLAMA_TIMEOUT_SECONDS).") from exc
         except (ConnectionError, httpx.HTTPError) as exc:
             raise LlmUnavailable("The model server (Ollama) is not reachable. Is `ollama serve` running?") from exc

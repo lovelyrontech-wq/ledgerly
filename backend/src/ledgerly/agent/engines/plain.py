@@ -23,6 +23,8 @@ class PlainEngine:
 
     async def chat(self, run: AgentRun, message: str) -> AsyncIterator[AgentEvent]:
         conversation = run.conversation
+        for note in conversation.take_notes():
+            conversation.add(note)
         conversation.add({"role": "user", "content": message})
 
         for _ in range(self._max_steps):
