@@ -123,3 +123,16 @@ class BatchOut(ApiModel):
     # Count of items per result, e.g. {"applied": 39, "skipped_changed": 1}
     summary: dict[str, int]
     items: list[BatchItemOut]
+
+# -------------Agent---------------
+class AgentChatRequest(ApiModel):
+    message: str = Field(min_length=1, max_length=4000)
+    # Leave out to start a new conversation.
+    conversation_id: str | None = Field(default=None, max_length=64)
+    # The folder the user is looking at, so "this folder" means something.
+    folder_id: str | None = Field(default=None, max_length=64)
+
+
+class AgentBatchRequest(ApiModel):
+    conversation_id: str = Field(min_length=1, max_length=64)
+    batch_id: str = Field(min_length=1, max_length=64)

@@ -11,7 +11,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session, sessionmaker
 
-from ledgerly.api.routes import auth, batches, folders, records
+from ledgerly.agent import AgentServices
+from ledgerly.agent.conversations import ConversationStore
+from ledgerly.agent.llm import OllamaLlm
+from ledgerly.agent.mcp_client import http_toolbox_factory
+from ledgerly.agent.registry import build_engines
+from ledgerly.api.routes import agent, auth, batches, folders, records
+
 from ledgerly.config import Settings, get_settings
 from ledgerly.db.session import session_factory as default_session_factory
 from ledgerly.permissions import FolderNotFound, PermissionDenied
@@ -24,6 +30,7 @@ from ledgerly.services.batches import BatchConflict, BatchNotFound
 def create_app(
     settings: Settings | None = None,
     session_factory: sessionmaker[Session] | None = None,
+    agent_services: AgentServices | None = None,
 ) -> FastAPI:
     settings = settings or get_settings()
     secret = settings.auth_secret.get_secret_value() if settings.auth_secret else ""
@@ -41,8 +48,15 @@ def create_app(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         allow_credentials=False,
-        allow_methods=["GET", "POST", "PATCH", "DELETE"],
-        allow_headers=["Authorization", "Content-Type", "Idempotency-Key"],
+        allow_methods=["GET", "POST", s"PATCH", "DELETE"],
+        allow_headers=["Authorization", "Content-Type", "Idempotency-Key",  "X-Agent-Engine"],
+    )
+
+    app.state.agent = agent_services or AgentServices(
+        engines=build_engines(settings),  # fails here if the AGENT_ENGINE flags are wrong
+        llm=OllamaLlm(settings),
+        open_toolbox=http_toolbox_factory(settings.mcp_public_url),
+        conversations=ConversationStore(settings.agent_max_conversations),
     )
 
     @app.exception_handler(FolderNotFound)
@@ -73,4 +87,5 @@ def create_app(
     app.include_router(folders.router)
     app.include_router(records.router)
     app.include_router(batches.router)
+    app.include_router(batches.agent)
     return app

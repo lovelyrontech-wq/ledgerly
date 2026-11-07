@@ -16,6 +16,7 @@ dependencies = [
     "black>=26.10.1",
     "isort>=9.0.2",
     "mcp>=2.3.0",
+    "ollama>=0.6.3",
 ]
 
 [dependency-groups]
@@ -40,6 +41,7 @@ packages = ["src/ledgerly"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = ["ollama: needs a running Ollama with the chat model (skipped otherwise)"]
 
 [tool.ruff]
 line-length = 120
