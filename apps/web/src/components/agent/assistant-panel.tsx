@@ -60,6 +60,25 @@ function MetricsBadge({ engine, metrics }: { engine?: string; metrics: Partial<A
   );
 }
 
+/** Shown while the model works. On a CPU-only machine the first word can take 30 s or more. */
+function Thinking({ label }: { label: string }) {
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const started = Date.now();
+    const timer = setInterval(() => setSeconds(Math.floor((Date.now() - started) / 1000)), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div className="flex items-center gap-2 text-sm text-muted-foreground" role="status">
+      <Loader2 className="size-4 animate-spin" />
+      <span>
+        {label}… <span className="tabular-nums">{seconds}s</span>
+      </span>
+      {seconds >= 15 && <span className="text-xs">(the local model is slow on CPU; this can take a minute)</span>}
+    </div>
+  );
+}
+
 function BatchCard({
   batch,
   tone,
@@ -140,7 +159,15 @@ function AssistantBubble({
         </div>
       )}
 
-      {(message.text || message.streaming) && (
+      {message.streaming && !message.text && (
+        // Remounts (and restarts its timer) when the agent moves from a tool back to the model.
+        <Thinking
+          key={message.tools.length}
+          label={message.tools.some((t) => t.ok === undefined) ? "Running a tool" : "Thinking"}
+        />
+      )}
+
+      {message.text && (
         <div className="text-sm leading-relaxed whitespace-pre-wrap">
           {message.text}
           {message.streaming && (
