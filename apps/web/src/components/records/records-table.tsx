@@ -16,10 +16,11 @@ type SortKey = "name" | "valueCents" | "status" | "updatedAt";
 type Sort = { key: SortKey; dir: "asc" | "desc" };
 
 const STATUS_STYLE: Record<string, string> = {
-  paid: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-  active: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+  paid: "bg-success/12 text-success",
+  active: "bg-success/12 text-success",
   overdue: "bg-destructive/10 text-destructive",
-  sent: "bg-sky-500/10 text-sky-700 dark:text-sky-400",
+  sent: "bg-brand-2/15 text-brand-2",
+  draft: "bg-warning/15 text-warning",
 };
 
 function compare(a: LedgerRecord, b: LedgerRecord, key: SortKey) {
@@ -98,23 +99,32 @@ export function RecordsTable({ folderId, folderType }: { folderId: string; folde
 
   return (
     <div className="grid gap-3">
-      <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter by status">
-        {[null, ...statuses].map((s) => (
-          <Button
-            key={s ?? "all"}
-            size="sm"
-            variant={status === s ? "secondary" : "ghost"}
-            aria-pressed={status === s}
-            className="capitalize"
-            onClick={() => chooseStatus(s)}
-          >
-            {s ?? "All"}
-          </Button>
-        ))}
+      <div className="flex items-center gap-2">
+        <div
+          className="-mx-1 flex min-w-0 flex-1 gap-1 overflow-x-auto px-1 py-0.5 [scrollbar-width:none]"
+          role="group"
+          aria-label="Filter by status"
+        >
+          {[null, ...statuses].map((s) => (
+            <Button
+              key={s ?? "all"}
+              size="sm"
+              variant="ghost"
+              aria-pressed={status === s}
+              className={cn(
+                "shrink-0 rounded-full border border-transparent px-3.5 text-muted-foreground capitalize",
+                "aria-pressed:border-primary/20 aria-pressed:bg-primary/10 aria-pressed:text-primary aria-pressed:hover:bg-primary/15",
+              )}
+              onClick={() => chooseStatus(s)}
+            >
+              {s ?? "All"}
+            </Button>
+          ))}
+        </div>
         <Button
           size="icon-sm"
-          variant="ghost"
-          className="ml-auto"
+          variant="outline"
+          className="shrink-0 rounded-full"
           aria-label="Reload records"
           onClick={() => refetch()}
           disabled={isFetching}
@@ -130,14 +140,14 @@ export function RecordsTable({ folderId, folderType }: { folderId: string; folde
       ) : isPending ? (
         <div className="grid gap-2">
           {Array.from({ length: 6 }, (_, i) => (
-            <Skeleton key={i} className="h-9" />
+            <Skeleton key={i} className="h-11 rounded-xl" />
           ))}
         </div>
       ) : (
-        <div className={cn("rounded-lg border transition-opacity", isPlaceholderData && "opacity-60")}>
+        <div className={cn("surface overflow-hidden transition-opacity", isPlaceholderData && "opacity-60")}>
           <Table>
-            <TableHeader>
-              <TableRow>
+            <TableHeader className="bg-muted/50 [&_th]:h-10 [&_th]:text-xs [&_th]:font-semibold [&_th]:tracking-wide [&_th]:text-muted-foreground">
+              <TableRow className="hover:bg-transparent">
                 <SortHeader label="Name" column="name" sort={sort} onSort={toggleSort} />
                 <SortHeader label="Value" column="valueCents" sort={sort} onSort={toggleSort} className="text-right" />
                 <SortHeader label="Status" column="status" sort={sort} onSort={toggleSort} />
@@ -159,18 +169,21 @@ export function RecordsTable({ folderId, folderType }: { folderId: string; folde
                 </TableRow>
               ) : (
                 rows.map((record) => (
-                  <TableRow key={record.id}>
-                    <TableCell className="max-w-56 truncate font-medium">{record.name}</TableCell>
-                    <TableCell className="text-right tabular-nums">
+                  <TableRow key={record.id} className="transition-colors hover:bg-accent/40 [&_td]:py-3">
+                    <TableCell className="max-w-40 truncate font-medium sm:max-w-72">{record.name}</TableCell>
+                    <TableCell className="text-right font-mono text-[0.8rem] tabular-nums">
                       {formatMoney(record.valueCents, record.currency)}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className={cn("capitalize", STATUS_STYLE[record.status])}>
+                      <Badge variant="secondary" className={cn("gap-1.5 capitalize", STATUS_STYLE[record.status])}>
+                        <span className="size-1.5 rounded-full bg-current" aria-hidden />
                         {record.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden text-muted-foreground sm:table-cell">
-                      <time dateTime={record.updatedAt}>{new Date(record.updatedAt).toLocaleString()}</time>
+                    <TableCell className="hidden text-xs text-muted-foreground sm:table-cell">
+                      <time dateTime={record.updatedAt}>
+                        {new Date(record.updatedAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
+                      </time>
                     </TableCell>
                   </TableRow>
                 ))
@@ -180,26 +193,27 @@ export function RecordsTable({ folderId, folderType }: { folderId: string; folde
         </div>
       )}
 
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span aria-live="polite">
+      <div className="flex items-center gap-2 px-1 text-sm text-muted-foreground">
+        <span aria-live="polite" className="tabular-nums">
           {from}–{to} of {total}
         </span>
         <Button
           size="icon-sm"
           variant="outline"
-          className="ml-auto"
+          className="ml-auto rounded-full"
           aria-label="Previous page"
           disabled={page === 0}
           onClick={() => setPage((p) => p - 1)}
         >
           <ChevronLeft />
         </Button>
-        <span className="tabular-nums">
+        <span className="min-w-12 text-center font-mono text-xs tabular-nums">
           {page + 1} / {pageCount}
         </span>
         <Button
           size="icon-sm"
           variant="outline"
+          className="rounded-full"
           aria-label="Next page"
           disabled={page + 1 >= pageCount || isPlaceholderData}
           onClick={() => setPage((p) => p + 1)}

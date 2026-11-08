@@ -18,6 +18,8 @@ A mini SaaS app with folders of records (invoices, products) and an in-app agent
 - Node.js 20+ for the web UI (from step 3)
 - Ollama (from step 5)
 
+**Run the whole app locally (all four servers):** see [docs/LOCAL_DEV.md](docs/LOCAL_DEV.md).
+
 ## Backend setup
 
 ```bash

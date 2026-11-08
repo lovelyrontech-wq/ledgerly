@@ -51,9 +51,9 @@ export function LoginForm() {
   }
 
   return (
-    <Card>
+    <Card className="shadow-xl shadow-primary/5 ring-foreground/8">
       <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <CardContent className="grid gap-4">
+        <CardContent className="grid gap-5 pt-2">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
@@ -66,6 +66,7 @@ export function LoginForm() {
               type="email"
               autoComplete="username"
               placeholder="alice@ledgerly.test"
+              className="h-11"
               aria-invalid={!!errors.email}
               {...form.register("email")}
             />
@@ -77,14 +78,20 @@ export function LoginForm() {
               id="password"
               type="password"
               autoComplete="current-password"
+              placeholder="••••••••"
+              className="h-11"
               aria-invalid={!!errors.password}
               {...form.register("password")}
             />
             {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
           </div>
         </CardContent>
-        <CardFooter className="mt-4">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+        <CardFooter className="mt-6 border-t-0 bg-transparent pb-4">
+          <Button
+            type="submit"
+            className="h-11 w-full text-sm font-semibold shadow-lg shadow-primary/25"
+            disabled={isSubmitting}
+          >
             {isSubmitting && <LoaderCircle className="animate-spin" />}
             Sign in
           </Button>

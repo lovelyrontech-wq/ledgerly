@@ -1,6 +1,17 @@
 "use client";
 
-import { Check, CircleAlert, Gauge, Loader2, RotateCcw, Send, Square, SquarePen, Wrench } from "lucide-react";
+import {
+  ArrowUp,
+  Check,
+  CircleAlert,
+  Gauge,
+  Loader2,
+  RotateCcw,
+  Sparkles,
+  Square,
+  SquarePen,
+  Wrench,
+} from "lucide-react";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -92,8 +103,9 @@ function BatchCard({
   return (
     <div
       className={cn(
-        "mt-2 grid gap-2 rounded-lg border p-3 text-xs",
-        tone === "pending" && "border-amber-500/40 bg-amber-500/5",
+        "mt-2 grid gap-2 rounded-xl border bg-card p-3 text-xs shadow-sm",
+        tone === "pending" && "border-warning/40 bg-warning/5",
+        tone === "applied" && "border-success/30 bg-success/5",
         tone === "undone" && "opacity-70",
       )}
     >
@@ -111,7 +123,7 @@ function BatchCard({
         </p>
       )}
       {changes.length > 0 && (
-        <ul className="grid max-h-40 gap-0.5 overflow-y-auto tabular-nums">
+        <ul className="grid max-h-40 gap-0.5 overflow-y-auto font-mono text-[0.7rem] tabular-nums">
           {changes.map((c) => (
             <li key={c.recordId} className="flex gap-2">
               <span className="min-w-0 flex-1 truncate">{c.name}</span>
@@ -119,9 +131,7 @@ function BatchCard({
               <span>→ {c.after}</span>
             </li>
           ))}
-          {!!batch.changesNotShown && (
-            <li className="text-muted-foreground">…and {batch.changesNotShown} more</li>
-          )}
+          {!!batch.changesNotShown && <li className="text-muted-foreground">…and {batch.changesNotShown} more</li>}
         </ul>
       )}
       {children && <div className="flex flex-wrap gap-2">{children}</div>}
@@ -140,91 +150,96 @@ function AssistantBubble({
 }) {
   const [undoing, setUndoing] = useState(false);
   return (
-    <div className="grid gap-1.5">
-      {message.tools.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {message.tools.map((tool, i) => (
-            <Badge key={i} variant="secondary" className="gap-1 font-mono text-[0.7rem] font-normal">
-              {tool.ok === undefined ? (
-                <Loader2 className="size-3 animate-spin" />
-              ) : tool.ok ? (
-                <Wrench className="size-3" />
-              ) : (
-                <CircleAlert className="size-3 text-destructive" />
-              )}
-              {tool.name}
-              {tool.durationMs != null && <span className="opacity-60">{ms(tool.durationMs)}</span>}
-            </Badge>
-          ))}
-        </div>
-      )}
+    <div className="flex gap-2.5">
+      <span className="brand-gradient mt-0.5 grid size-6 shrink-0 place-items-center rounded-lg text-white" aria-hidden>
+        <Sparkles className="size-3.5" />
+      </span>
+      <div className="grid min-w-0 flex-1 gap-1.5">
+        {message.tools.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {message.tools.map((tool, i) => (
+              <Badge key={i} variant="secondary" className="gap-1 font-mono text-[0.7rem] font-normal">
+                {tool.ok === undefined ? (
+                  <Loader2 className="size-3 animate-spin" />
+                ) : tool.ok ? (
+                  <Wrench className="size-3" />
+                ) : (
+                  <CircleAlert className="size-3 text-destructive" />
+                )}
+                {tool.name}
+                {tool.durationMs != null && <span className="opacity-60">{ms(tool.durationMs)}</span>}
+              </Badge>
+            ))}
+          </div>
+        )}
 
-      {message.streaming && !message.text && (
-        // Remounts (and restarts its timer) when the agent moves from a tool back to the model.
-        <Thinking
-          key={message.tools.length}
-          label={message.tools.some((t) => t.ok === undefined) ? "Running a tool" : "Thinking"}
-        />
-      )}
+        {message.streaming && !message.text && (
+          // Remounts (and restarts its timer) when the agent moves from a tool back to the model.
+          <Thinking
+            key={message.tools.length}
+            label={message.tools.some((t) => t.ok === undefined) ? "Running a tool" : "Thinking"}
+          />
+        )}
 
-      {message.text && (
-        <div className="text-sm leading-relaxed whitespace-pre-wrap">
-          {message.text}
-          {message.streaming && (
-            <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-foreground/60 align-text-bottom" />
-          )}
-        </div>
-      )}
+        {message.text && (
+          <div className="text-sm leading-relaxed whitespace-pre-wrap">
+            {message.text}
+            {message.streaming && (
+              <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-foreground/60 align-text-bottom" />
+            )}
+          </div>
+        )}
 
-      {message.approval && (
-        <BatchCard batch={message.approval} tone="pending">
-          <Button
-            size="sm"
-            onClick={() => assistant.approve(message.approval!.batchId)}
-            disabled={assistant.busy || !isPending(message.approval.batchId)}
-          >
-            <Check />
-            Approve
-          </Button>
-          <span className="self-center text-muted-foreground">Nothing changes until you approve.</span>
-        </BatchCard>
-      )}
-
-      {message.applied && (
-        <BatchCard batch={message.applied} tone={message.undone ? "undone" : "applied"}>
-          {!message.undone && (
+        {message.approval && (
+          <BatchCard batch={message.approval} tone="pending">
             <Button
               size="sm"
-              variant="outline"
-              disabled={undoing}
-              onClick={async () => {
-                setUndoing(true);
-                try {
-                  await assistant.undo(message.applied!.batchId);
-                } finally {
-                  setUndoing(false);
-                }
-              }}
+              onClick={() => assistant.approve(message.approval!.batchId)}
+              disabled={assistant.busy || !isPending(message.approval.batchId)}
             >
-              {undoing ? <Loader2 className="animate-spin" /> : <RotateCcw />}
-              Undo
+              <Check />
+              Approve
             </Button>
-          )}
-        </BatchCard>
-      )}
+            <span className="self-center text-muted-foreground">Nothing changes until you approve.</span>
+          </BatchCard>
+        )}
 
-      {message.error && (
-        <Alert variant="destructive" className="py-2">
-          <CircleAlert />
-          <AlertDescription>{message.error}</AlertDescription>
-        </Alert>
-      )}
+        {message.applied && (
+          <BatchCard batch={message.applied} tone={message.undone ? "undone" : "applied"}>
+            {!message.undone && (
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={undoing}
+                onClick={async () => {
+                  setUndoing(true);
+                  try {
+                    await assistant.undo(message.applied!.batchId);
+                  } finally {
+                    setUndoing(false);
+                  }
+                }}
+              >
+                {undoing ? <Loader2 className="animate-spin" /> : <RotateCcw />}
+                Undo
+              </Button>
+            )}
+          </BatchCard>
+        )}
 
-      {message.metrics && Object.keys(message.metrics).length > 0 && (
-        <div>
-          <MetricsBadge engine={message.engine} metrics={message.metrics} />
-        </div>
-      )}
+        {message.error && (
+          <Alert variant="destructive" className="py-2">
+            <CircleAlert />
+            <AlertDescription>{message.error}</AlertDescription>
+          </Alert>
+        )}
+
+        {message.metrics && Object.keys(message.metrics).length > 0 && (
+          <div>
+            <MetricsBadge engine={message.engine} metrics={message.metrics} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -260,7 +275,7 @@ export function AssistantPanel({ assistant }: { assistant: Assistant }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex items-center gap-2 border-b px-3 py-2">
-        <div role="radiogroup" aria-label="Agent engine" className="flex rounded-lg bg-muted p-0.5">
+        <div role="radiogroup" aria-label="Agent engine" className="flex rounded-full bg-muted p-0.5">
           {ENGINES.map((e) => (
             <button
               key={e.value}
@@ -270,7 +285,7 @@ export function AssistantPanel({ assistant }: { assistant: Assistant }) {
               disabled={busy}
               onClick={() => assistant.setEngine(e.value)}
               className={cn(
-                "rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors disabled:opacity-50",
+                "rounded-full px-3 py-1 text-xs font-medium text-muted-foreground transition-colors disabled:opacity-50",
                 engine === e.value && "bg-background text-foreground shadow-sm",
               )}
             >
@@ -293,16 +308,28 @@ export function AssistantPanel({ assistant }: { assistant: Assistant }) {
 
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-4" aria-live="polite">
         {messages.length === 0 ? (
-          <div className="grid gap-3 text-sm text-muted-foreground">
-            <p>
-              Ask about this folder&apos;s records or the app. Bulk changes are shown as a preview first and only
-              applied when you approve.
-            </p>
-            <div className="flex flex-wrap gap-1.5">
+          <div className="grid gap-4 text-sm text-muted-foreground">
+            <div className="grid justify-items-start gap-2">
+              <span className="brand-gradient grid size-10 place-items-center rounded-2xl text-white shadow-lg shadow-primary/25">
+                <Sparkles className="size-5" />
+              </span>
+              <p className="font-heading text-lg font-semibold text-foreground">How can I help?</p>
+              <p>
+                Ask about this folder&apos;s records or the app. Bulk changes are shown as a preview first and only
+                applied when you approve.
+              </p>
+            </div>
+            <div className="grid gap-1.5">
               {SUGGESTIONS.map((s) => (
-                <Button key={s} variant="outline" size="xs" onClick={() => assistant.send(s)} disabled={busy}>
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => assistant.send(s)}
+                  disabled={busy}
+                  className="rounded-xl border bg-card px-3 py-2 text-left text-sm text-foreground transition-colors hover:border-primary/30 hover:bg-accent/50 disabled:opacity-50"
+                >
                   {s}
-                </Button>
+                </button>
               ))}
             </div>
             <p className="text-xs">
@@ -315,7 +342,7 @@ export function AssistantPanel({ assistant }: { assistant: Assistant }) {
               m.role === "user" ? (
                 <div
                   key={m.id}
-                  className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-3 py-2 text-sm whitespace-pre-wrap text-primary-foreground"
+                  className="brand-gradient ml-auto max-w-[85%] rounded-2xl rounded-br-md px-3.5 py-2 text-sm whitespace-pre-wrap text-white shadow-sm shadow-primary/20"
                 >
                   {m.text}
                 </div>
@@ -328,26 +355,35 @@ export function AssistantPanel({ assistant }: { assistant: Assistant }) {
         <div ref={endRef} />
       </div>
 
-      <form onSubmit={submit} className="flex items-end gap-2 border-t p-3">
-        <Textarea
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={onKeyDown}
-          placeholder="Message the assistant…"
-          aria-label="Message"
-          rows={1}
-          maxLength={4000}
-          className="max-h-32 min-h-9 resize-none"
-        />
-        {busy ? (
-          <Button type="button" size="icon" variant="outline" aria-label="Stop" onClick={assistant.stop}>
-            <Square />
-          </Button>
-        ) : (
-          <Button type="submit" size="icon" aria-label="Send" disabled={!draft.trim()}>
-            <Send />
-          </Button>
-        )}
+      <form onSubmit={submit} className="border-t p-3">
+        <div className="flex items-end gap-2 rounded-2xl border bg-background p-1.5 shadow-sm transition-colors focus-within:border-primary/40 focus-within:ring-3 focus-within:ring-ring/20">
+          <Textarea
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={onKeyDown}
+            placeholder="Message the assistant…"
+            aria-label="Message"
+            rows={1}
+            maxLength={4000}
+            className="max-h-32 min-h-9 resize-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+          />
+          {busy ? (
+            <Button
+              type="button"
+              size="icon"
+              variant="outline"
+              className="rounded-xl"
+              aria-label="Stop"
+              onClick={assistant.stop}
+            >
+              <Square />
+            </Button>
+          ) : (
+            <Button type="submit" size="icon" className="rounded-xl" aria-label="Send" disabled={!draft.trim()}>
+              <ArrowUp />
+            </Button>
+          )}
+        </div>
       </form>
     </div>
   );
