@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, CircleAlert, Gauge, Loader2, RotateCcw, Send, Square, SquarePen, Wrench } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -246,7 +246,7 @@ export function AssistantPanel({ assistant }: { assistant: Assistant }) {
     endRef.current?.scrollIntoView({ block: "end" });
   }, [messages.length, lastText]);
 
-  function submit(event?: FormEvent) {
+  function submit(event?: { preventDefault(): void }) {
     event?.preventDefault();
     if (!draft.trim() || busy) return;
     void assistant.send(draft);

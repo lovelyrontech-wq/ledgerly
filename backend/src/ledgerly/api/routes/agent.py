@@ -25,7 +25,15 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic.alias_generators import to_camel
 
 from ledgerly.agent import AgentServices
-from ledgerly.agent.base import AgentEngine, AgentEvent, AgentRun, DoneEvent, ErrorEvent, LlmUnavailable
+from ledgerly.agent.base import (
+    AgentEngine,
+    AgentEvent,
+    AgentRun,
+    DoneEvent,
+    ErrorEvent,
+    LlmUnavailable,
+    TokenEvent,
+)
 from ledgerly.agent.conversations import Conversation, ConversationNotFound
 from ledgerly.agent.prompt import user_message
 from ledgerly.agent.registry import EngineNotEnabled, choose_engine
@@ -95,7 +103,10 @@ def _stream(
     user_id: str,
     token: str,
     start: Callable[[AgentRun], AsyncIterator[AgentEvent]],
+    trace: tuple[str, dict[str, Any]],
 ) -> StreamingResponse:
+    """Run the engine and stream its events. `trace` is the LangSmith run name and inputs."""
+    trace_name, trace_inputs = trace
     async def events() -> AsyncIterator[str]:
         if conversation.lock.locked():
             yield _sse(ErrorEvent("This conversation is still answering. Wait for it to finish."))
@@ -103,21 +114,40 @@ def _stream(
             return
         async with conversation.lock:
             run: AgentRun | None = None
-            try:
-                async with agent.open_toolbox(user_id, token) as toolbox:
-                    run = AgentRun(conversation, toolbox, agent.llm)
-                    async for event in start(run):
-                        yield _sse(event)
-            except Exception as exc:
-                message = _known_failure(exc)
-                if message is None:
-                    logger.exception("Agent run failed (engine=%s, conversation=%s)", engine.name, conversation.id)
-                    message = "Something went wrong while answering. Please try again."
-                yield _sse(ErrorEvent(message))
-                if run is not None:
-                    run.stop = "error"
-            stop = run.stop if run is not None else "error"
-            metrics = run.metrics.summary() if run is not None else {}
+            answer: list[str] = []
+            metadata = {"engine": engine.name, "conversation_id": conversation.id, "user_id": user_id}
+            with agent.tracer.span(
+                trace_name, "chain", trace_inputs, tags=[f"engine:{engine.name}"], metadata=metadata
+            ) as span:
+                try:
+                    async with agent.open_toolbox(user_id, token) as toolbox:
+                        run = AgentRun(conversation, toolbox, agent.llm, tracer=agent.tracer)
+                        async for event in start(run):
+                            if isinstance(event, TokenEvent):
+                                answer.append(event.text)
+                            yield _sse(event)
+                except Exception as exc:
+                    message = _known_failure(exc)
+                    if message is None:
+                        logger.exception("Agent run failed (engine=%s, conversation=%s)", engine.name, conversation.id)
+                        message = "Something went wrong while answering. Please try again."
+                    span.fail(message)
+                    yield _sse(ErrorEvent(message))
+                    if run is not None:
+                        run.stop = "error"
+                stop = run.stop if run is not None else "error"
+                metrics = run.metrics.summary() if run is not None else {}
+                # Metrics as metadata too, so runs can be filtered and compared by engine in LangSmith.
+                span.add_tags([f"stop:{stop}"])
+                span.add_metadata(metrics)
+                span.add_outputs(
+                    {
+                        "answer": "".join(answer),
+                        "stop": stop,
+                        "pendingBatchId": conversation.pending_batch_id,
+                        "metrics": metrics,
+                    }
+                )
             yield _sse(DoneEvent(conversation.id, engine.name, stop, conversation.pending_batch_id, metrics))
 
     return StreamingResponse(
@@ -148,7 +178,15 @@ async def chat(
         engine = _engine(agent, settings, conversation.engine)
 
     message = user_message(body.message, body.folder_id)
-    return _stream(agent, engine, conversation, user.id, token, lambda run: engine.chat(run, message))
+    return _stream(
+        agent,
+        engine,
+        conversation,
+        user.id,
+        token,
+        lambda run: engine.chat(run, message),
+        ("agent.chat", {"message": body.message, "folderId": body.folder_id}),
+    )
 
 
 @router.post("/approve")
@@ -173,7 +211,13 @@ async def approve(
 
     engine = _engine(agent, settings, conversation.engine)
     return _stream(
-        agent, engine, conversation, user.id, token, lambda run: engine.approve(run, body.batch_id, approval_code)
+        agent,
+        engine,
+        conversation,
+        user.id,
+        token,
+        lambda run: engine.approve(run, body.batch_id, approval_code),
+        ("agent.approve", {"batchId": body.batch_id}),  # never the approval code
     )
 
 

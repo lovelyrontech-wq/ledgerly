@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ledgerly.agent.base import AgentEngine, LlmClient
 from ledgerly.agent.conversations import ConversationStore
 from ledgerly.agent.mcp_client import ToolboxFactory
+from ledgerly.observability import Tracer
+
 
 @dataclass
 class AgentServices:
@@ -16,3 +18,4 @@ class AgentServices:
     llm: LlmClient
     open_toolbox: ToolboxFactory
     conversations: ConversationStore
+    tracer: Tracer = field(default_factory=Tracer.disabled)

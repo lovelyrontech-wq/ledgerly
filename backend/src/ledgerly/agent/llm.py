@@ -11,12 +11,14 @@ import ollama
 from ledgerly.agent.base import LlmChunk, LlmStats, LlmToolCall, LlmUnavailable
 from ledgerly.config import Settings
 
+
 class OllamaLlm:
     def __init__(self, settings: Settings, client: ollama.AsyncClient | None = None) -> None:
         self._client = client or ollama.AsyncClient(
             host=settings.ollama_base_url, timeout=settings.ollama_timeout_seconds
         )
         self._model = settings.ollama_chat_model
+        self.model = settings.ollama_chat_model  # shown in traces
         self._keep_alive = settings.ollama_keep_alive
         self._think = settings.agent_think
         self._options = {

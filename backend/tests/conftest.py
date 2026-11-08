@@ -52,7 +52,13 @@ def seeded(make_session: sessionmaker[Session]) -> sessionmaker[Session]:
 @pytest.fixture
 def settings() -> Settings:
     # bm25: tests never call Ollama. Hybrid search has its own tests with a fake embedder.
-    return Settings(auth_secret=SecretStr(TEST_SECRET), auth_token_ttl_minutes=60, help_search_mode="bm25")
+    # langsmith_tracing=False: tests never send traces, even with a key in backend/.env.
+    return Settings(
+        auth_secret=SecretStr(TEST_SECRET),
+        auth_token_ttl_minutes=60,
+        help_search_mode="bm25",
+        langsmith_tracing=False,
+    )
 
 @pytest.fixture
 def client(seeded: sessionmaker[Session], settings: Settings) -> Iterator[TestClient]:

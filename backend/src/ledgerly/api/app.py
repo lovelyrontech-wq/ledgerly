@@ -6,6 +6,9 @@ API docs:             http://localhost:8000/docs
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -17,16 +20,15 @@ from ledgerly.agent.llm import OllamaLlm
 from ledgerly.agent.mcp_client import http_toolbox_factory
 from ledgerly.agent.registry import build_engines
 from ledgerly.api.routes import agent, auth, batches, folders, records
-
 from ledgerly.config import Settings, get_settings
 from ledgerly.db.session import session_factory as default_session_factory
+from ledgerly.observability import build_tracer
 from ledgerly.permissions import FolderNotFound, PermissionDenied
 from ledgerly.security import MIN_SECRET_LENGTH
 
 # 2. add an import under "from ledgerly.security import MIN_SECRET_LENGTH":
 from ledgerly.services.batches import BatchConflict, BatchNotFound
-from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
+
 
 def create_app(
     settings: Settings | None = None,
@@ -49,6 +51,7 @@ def create_app(
             close = getattr(engine, "aclose", None)
             if close is not None:
                 await close()
+        app.state.agent.tracer.flush()  # send traces still queued
 
     app = FastAPI(title="Ledgerly API", version="0.1.0", lifespan=lifespan)
     app.state.settings = settings
@@ -67,6 +70,7 @@ def create_app(
         llm=OllamaLlm(settings),
         open_toolbox=http_toolbox_factory(settings.mcp_public_url),
         conversations=ConversationStore(settings.agent_max_conversations),
+        tracer=build_tracer(settings),
     )
 
     @app.exception_handler(FolderNotFound)

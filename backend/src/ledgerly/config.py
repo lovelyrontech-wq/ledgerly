@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
-
 from typing import Annotated, Literal
 
 from pydantic import SecretStr, field_validator
@@ -71,6 +70,13 @@ class Settings(BaseSettings):
     agent_seed: int = 42  # with temperature 0, makes runs repeatable for the benchmark
     agent_think: bool = False  # reasoning models (qwen3) think before answering; off is much faster
     agent_max_conversations: int = 500  # kept in memory; the oldest is dropped first
+
+    # LangSmith tracing (step 7): one trace per agent request, tagged engine:<name>. Off unless
+    # LANGSMITH_TRACING=true and LANGSMITH_API_KEY is set.
+    langsmith_tracing: bool = False
+    langsmith_api_key: SecretStr | None = None
+    langsmith_project: str = "ledgerly-dev"
+    langsmith_endpoint: str = "https://api.smith.langchain.com"
 
     # LangGraph engine: where paused conversations (checkpoints) are saved. Relative to backend/.
     agent_checkpoint_db: str = "agent-checkpoints.db"

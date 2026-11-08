@@ -17,6 +17,7 @@ dependencies = [
     "isort>=9.0.2",
     "mcp>=2.3.0",
     "ollama>=0.6.3",
+    "langsmith>=0.14",
 ]
 
 [dependency-groups]
